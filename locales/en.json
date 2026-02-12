@@ -659,6 +659,9 @@
   },
 
   "sidebar": {
+    "travelers": "Travelers",
+    "allTravelers": "All Travelers",
+    "addTraveler": "Add Traveler",
     "bookings": "Bookings",
     "allBookings": "All Bookings",
     "addBooking": "Add Booking",

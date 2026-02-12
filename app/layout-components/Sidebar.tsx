@@ -217,6 +217,27 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
       ],
     },
     {
+      key: "travelers",
+      label: t("travelers"),
+      icon: UserCheck,
+      permission: "STUDENTS_VIEW",
+      activeLinks: ["/travelers", "/travelers/add"],
+      children: [
+        {
+          href: "/travelers",
+          label: t("allTravelers"),
+          icon: List,
+          permission: "STUDENTS_VIEW",
+        },
+        {
+          href: "/travelers/add",
+          label: t("addTraveler"),
+          icon: Plus,
+          permission: "STUDENTS_CREATE",
+        },
+      ],
+    },
+    {
       key: "payments",
       label: t("payments"),
       icon: CreditCard,

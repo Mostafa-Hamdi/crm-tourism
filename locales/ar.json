@@ -639,6 +639,9 @@
     "import": "استيراد"
   },
   "sidebar": {
+    "travelers": "المسافرون",
+    "allTravelers": "جميع المسافرين",
+    "addTraveler": "إضافة مسافر",
     "bookings": "الحجوزات",
     "allBookings": "جميع الحجوزات",
     "addBooking": "إضافة حجز",
