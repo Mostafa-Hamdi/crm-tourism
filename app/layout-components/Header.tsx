@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/store/api/apiSlice";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import Link from "next/link";
 
 const Header = ({ sidebarOpen, setSidebarOpen }: any) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -300,18 +301,21 @@ const Header = ({ sidebarOpen, setSidebarOpen }: any) => {
                 </div>
 
                 <div className="py-2">
-                  <button className="cursor-pointer w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center gap-3 group">
+                  <Link
+                    href="/profile"
+                    className="cursor-pointer w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center gap-3 group"
+                  >
                     <div className="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 flex items-center justify-center transition-colors">
                       <User className="w-4 h-4" />
                     </div>
                     <span>{t("profile.myProfile")}</span>
-                  </button>
-                  <button className="cursor-pointer w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center gap-3 group">
+                  </Link>
+                  {/* <button className="cursor-pointer w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center gap-3 group">
                     <div className="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 flex items-center justify-center transition-colors">
                       <Settings className="w-4 h-4" />
                     </div>
                     <span>{t("profile.settings")}</span>
-                  </button>
+                  </button> */}
                 </div>
 
                 <div className="border-t border-gray-100 py-2">
