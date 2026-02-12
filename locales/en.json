@@ -1,0 +1,1080 @@
+{
+  "header": {
+    "notifications": {
+      "title": "Notifications",
+      "youHave": "You have {count} unread messages",
+      "markAllRead": "Mark all read",
+      "viewAll": "View all notifications →"
+    },
+    "profile": {
+      "myProfile": "My Profile",
+      "settings": "Settings",
+      "signOut": "Sign out"
+    },
+    "logout": {
+      "confirmTitle": "😢 Are you sure to logout?",
+      "confirmYes": "Yes",
+      "confirmNo": "No",
+      "success": "Logged out successfully!",
+      "failed": "Logout failed"
+    }
+  },
+  "login": {
+    "welcomeBack": "Welcome back",
+    "signInToAccess": "Sign in to access your dashboard",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "invalidEmail": "Invalid email address",
+    "emailRequired": "Email is required",
+    "passwordMin": "Password must be at least {min} characters",
+    "passwordRequired": "Password is required",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "createAccount": "Create an account",
+    "emailPlaceholder": "you@academy.com",
+    "passwordPlaceholder": "Enter your password",
+    "marketingTitleTop": "Transform your",
+    "marketingTitleBottom": "educational journey",
+    "marketingDesc": "Comprehensive CRM platform designed for modern academies to manage courses, students, and enrollments seamlessly.",
+    "studentsManaged": "Students Managed",
+    "activeCourses": "Active Courses",
+    "support": "Support",
+    "securePrivate": "Secure & Private",
+    "realTime": "Real-time Updates",
+    "cloud": "Cloud-based",
+    "copyright": "© 2026 AcademyCRM · Empowering education management"
+  },
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage your team members and permissions with ease",
+    "addUser": "Add User",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "addTitle": "Add New User",
+    "addSuccess": "User has been added successfully",
+    "addFail": "Failed to add user",
+    "adding": "Adding User...",
+    "addButton": "Add User",
+    "enterEmail": "Enter email address",
+    "creating": "Creating User...",
+    "create": "Create User",
+    "resetForm": "Reset Form",
+    "passwordRequirements": "Password Requirements",
+    "passwordReqs": [
+      "Minimum 8 characters long",
+      "At least one uppercase letter (A-Z)",
+      "At least one lowercase letter (a-z)",
+      "At least one number (0-9)"
+    ]
+  },
+  "leads": {
+    "addNote": {
+      "title": "Add Note",
+      "subtitle": "Add a note or interaction to this lead",
+      "goBack": "Go back",
+
+      "interactionTypes": {
+        "generalNote": "General Note",
+        "phoneCall": "Phone Call",
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "meeting": "Meeting",
+        "followUp": "Follow Up",
+        "other": "Other"
+      },
+
+      "form": {
+        "interactionDetails": "Interaction Details",
+        "interactionType": "Interaction Type",
+        "note": "Note",
+        "notePlaceholder": "Enter your {type} details here...",
+        "maxCharacters": "Maximum 500 characters",
+        "required": "*",
+        "cancel": "Cancel",
+        "addNote": "Add Note",
+        "addingNote": "Adding Note...",
+        "selected": "Selected: {value} ({label})"
+      },
+
+      "validation": {
+        "noteRequired": "Note is required",
+        "noteMin": "Note must be at least {min} characters",
+        "noteMax": "Note must not exceed {max} characters",
+        "interactionTypeRequired": "Interaction type is required",
+        "interactionTypeValid": "Please select a valid interaction type"
+      },
+
+      "infoBox": {
+        "title": "{type} Information",
+        "message": "This {type} will be added to the lead's timeline and can be viewed by all team members with access."
+      },
+
+      "success": {
+        "title": "Success!",
+        "message": "Note has been added successfully."
+      },
+
+      "error": {
+        "title": "Oops!",
+        "defaultMessage": "Failed to add note."
+      }
+    },
+
+    "edit": {
+      "title": "Edit Lead",
+      "subtitle": "Update lead information",
+      "back": "Back",
+      "backToLeads": "Back to Leads",
+      "loading": "Loading lead data...",
+      "notFound": "Lead not found",
+
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter full name",
+        "phoneNumber": "Phone Number",
+        "phoneNumberPlaceholder": "Enter phone number",
+        "emailAddress": "Email Address",
+        "emailPlaceholder": "Enter email address",
+        "source": "Source",
+        "sourcePlaceholder": "e.g., Website, Referral, Social Media",
+        "required": "*",
+        "cancel": "Cancel",
+        "updateLead": "Update Lead",
+        "updatingLead": "Updating Lead..."
+      },
+
+      "validation": {
+        "fullNameRequired": "Full name is required",
+        "fullNameMin": "Name must be at least {min} characters",
+        "fullNameMax": "Name must not exceed {max} characters",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Phone number must contain only numbers and valid characters",
+        "phoneMin": "Phone number must be at least {min} characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "sourceRequired": "Source is required",
+        "sourceMin": "Source must be at least {min} characters",
+        "sourceMax": "Source must not exceed {max} characters"
+      },
+
+      "info": {
+        "title": "Editing Lead #{id}",
+        "tip1": "Make sure all information is up to date",
+        "tip2": "Changes will be saved immediately upon submission",
+        "tip3": "Lead status and other details can be managed separately"
+      },
+
+      "success": {
+        "title": "Success!",
+        "message": "Lead has been updated successfully."
+      },
+
+      "error": {
+        "title": "Oops!",
+        "defaultMessage": "Failed to update lead."
+      }
+    },
+
+    "addTask": {
+      "title": "Add New Task",
+      "subtitle": "Create a task for lead #{id}",
+      "backToLead": "Back to Lead",
+
+      "form": {
+        "taskTitle": "Task Title",
+        "taskTitlePlaceholder": "e.g., Follow up call, Send proposal, Schedule meeting",
+        "dueDate": "Due Date",
+        "dueDateHelper": "Select a date for when this task should be completed",
+        "required": "*",
+        "cancel": "Cancel",
+        "createTask": "Create Task",
+        "creatingTask": "Creating Task...",
+        "taskCreated": "Task Created!"
+      },
+
+      "validation": {
+        "titleRequired": "Task title is required",
+        "titleMin": "Title must be at least {min} characters",
+        "titleMax": "Title must not exceed {max} characters",
+        "dueDateRequired": "Due date is required",
+        "dueDateFuture": "Due date must be in the future"
+      },
+
+      "success": {
+        "title": "Task Created Successfully!",
+        "message": "Redirecting you back to the lead..."
+      },
+
+      "error": {
+        "title": "Failed to Create Task",
+        "defaultMessage": "An error occurred. Please try again."
+      },
+
+      "tips": {
+        "title": "Tips for Creating Tasks",
+        "tip1": "Be specific with your task title for better tracking",
+        "tip2": "Set realistic due dates to stay on schedule",
+        "tip3": "Tasks will appear in your lead's activity timeline"
+      }
+    },
+
+    "notes": {
+      "title": "Lead Notes",
+      "subtitle": "View all notes and updates for Lead #{id}",
+      "addNote": "Add Note",
+      "goBack": "Go back",
+
+      "stats": {
+        "totalNotes": "Total Notes",
+        "lastUpdated": "Last Updated",
+        "noUpdates": "No updates",
+        "contributors": "Contributors",
+        "author": "Author"
+      },
+
+      "empty": {
+        "title": "No notes yet",
+        "message": "Start documenting your interactions with this lead",
+        "addFirstNote": "Add First Note"
+      },
+
+      "loading": "Loading notes..."
+    },
+
+    "leadDetails": {
+      "backToLeads": "Back to Leads",
+      "loading": "Loading lead details...",
+      "error": {
+        "title": "Error loading lead",
+        "message": "Unable to fetch lead details"
+      },
+
+      "header": {
+        "score": "Score",
+        "lastActivity": "Last activity",
+        "journey": {
+          "title": "Lead Journey - Click any stage to change",
+          "complete": "Complete"
+        }
+      },
+
+      "quickActions": {
+        "whatsApp": "WhatsApp",
+        "addNote": "Add Note",
+        "addTask": "Add Task",
+        "archive": "Archive"
+      },
+
+      "stages": {
+        "title": "Lead Journey - Click to Change Stage",
+        "clickToMove": "Click to move",
+        "current": "Current"
+      },
+
+      "stageHistory": {
+        "title": "Stage History",
+        "changedBy": "Changed by",
+        "unknownStage": "Unknown Stage"
+      },
+
+      "activityTimeline": {
+        "title": "Activity Timeline",
+        "noActivities": "No activities yet",
+        "duration": "Duration",
+        "result": "Result",
+        "by": "by",
+        "min": "min",
+        "sec": "sec"
+      },
+
+      "leadDetailsSection": {
+        "title": "Lead Details",
+        "source": "Source",
+        "budget": "Budget",
+        "interestedIn": "Interested In",
+        "location": "Location",
+        "assignedTo": "Assigned To",
+        "unknown": "Unknown",
+        "unassigned": "Unassigned"
+      },
+
+      "smartInsights": {
+        "title": "Smart Insights",
+        "leadScore": "Lead Score",
+        "lastActivity": "Last Activity",
+        "daysInPipeline": "Days in Pipeline",
+        "days": "days"
+      },
+
+      "timeAgo": {
+        "justNow": "Just now",
+        "minutesAgo": "{minutes} mins ago",
+        "hoursAgo": "{hours} hours ago",
+        "daysAgo": "{days} days ago"
+      },
+
+      "stageChangeConfirm": {
+        "title": "Change Lead Stage?",
+        "message": "Are you sure you want to move this lead to",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      },
+
+      "deleteConfirm": {
+        "title": "😢 Are you sure you want to delete this lead?",
+        "confirmYes": "Yes",
+        "confirmNo": "No",
+        "successTitle": "Deleted!",
+        "successMessage": "Lead has been deleted successfully.",
+        "errorTitle": "Oops!",
+        "errorMessage": "Failed to delete lead."
+      },
+
+      "weekDays": {
+        "short": {
+          "sun": "Sun",
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat"
+        },
+        "long": {
+          "sunday": "Sunday",
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday"
+        }
+      }
+    },
+
+    "add": {
+      "title": "Add New Lead",
+      "subtitle": "Create a new lead in your pipeline",
+      "back": "Back",
+
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter full name",
+        "phoneNumber": "Phone Number",
+        "phoneNumberPlaceholder": "Enter phone number",
+        "emailAddress": "Email Address",
+        "emailPlaceholder": "Enter email address",
+        "source": "Source",
+        "sourcePlaceholder": "e.g., Website, Referral, Social Media",
+        "required": "*",
+        "cancel": "Cancel",
+        "addLead": "Add Lead",
+        "addingLead": "Adding Lead..."
+      },
+
+      "validation": {
+        "fullNameRequired": "Full name is required",
+        "fullNameMin": "Name must be at least {min} characters",
+        "fullNameMax": "Name must not exceed {max} characters",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Phone number must contain only numbers and valid characters",
+        "phoneMin": "Phone number must be at least {min} characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "sourceRequired": "Source is required",
+        "sourceMin": "Source must be at least {min} characters",
+        "sourceMax": "Source must not exceed {max} characters"
+      },
+
+      "quickTips": {
+        "title": "Quick Tips",
+        "tip1": "Ensure all contact information is accurate",
+        "tip2": "Source helps track where your leads come from",
+        "tip3": "You can add more details after creating the lead"
+      },
+
+      "success": {
+        "title": "Success!",
+        "message": "Lead has been added successfully."
+      },
+
+      "error": {
+        "title": "Oops!",
+        "message": "Failed to add lead."
+      }
+    },
+
+    "board": {
+      "title": "Sales Pipeline",
+      "subtitle": "Manage your leads through the sales funnel",
+      "addLead": "Add Lead",
+      "loadingLeads": "Loading leads...",
+      "errorLoadingLeads": "Error loading leads",
+      "liveLeadsLoaded": "Live - {count} leads loaded",
+      "noLeadsFound": "No leads found",
+
+      "stats": {
+        "totalLeads": "Total Leads",
+        "wonDeals": "Won Deals",
+        "pipelineValue": "Pipeline Value",
+        "wonValue": "Won Value"
+      },
+
+      "search": {
+        "placeholder": "Search by name, company, email, or salesperson...",
+        "filters": "Filters",
+        "clearAll": "Clear All"
+      },
+
+      "savedFilters": {
+        "hotLeads": "🔥 My Hot Leads",
+        "recentActivity": "⚡ Recent Activity",
+        "highValue": "💰 High Value"
+      },
+
+      "filterLabels": {
+        "owner": "Owner",
+        "allOwners": "All Owners",
+        "source": "Source",
+        "allSources": "All Sources",
+        "priority": "Priority",
+        "allPriorities": "All Priorities",
+        "minBudget": "Min Budget",
+        "budgetPlaceholder": "e.g., 50000",
+        "lastActivity": "Last Activity",
+        "allTime": "All Time",
+        "last24Hours": "Last 24 hours",
+        "last7Days": "Last 7 days",
+        "last30Days": "Last 30 days",
+        "last90Days": "Last 90 days"
+      },
+
+      "priority": {
+        "urgent": "Urgent",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+
+      "stages": {
+        "new": "New",
+        "contacted": "Contacted",
+        "qualified": "Qualified",
+        "proposal": "Proposal",
+        "negotiation": "Negotiation",
+        "won": "Won",
+        "lost": "Lost"
+      },
+
+      "stageWarnings": {
+        "overCapacity": "Stage over capacity - focus needed",
+        "loading": "Loading...",
+        "dropLeadsHere": "Drop leads here"
+      },
+
+      "leadCard": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "whatsapp": "WhatsApp",
+        "addNote": "Add Note",
+        "assignOwner": "Assign Owner",
+        "justNow": "Just now",
+        "minutesAgo": "{minutes}m ago",
+        "hoursAgo": "{hours}h ago",
+        "daysAgo": "{days}d ago"
+      },
+
+      "confirmations": {
+        "markAsLost": {
+          "title": "Mark as Lost?",
+          "subtitle": "This lead will be marked as lost",
+          "movingTo": "Moving to:",
+          "reasonLabel": "Reason for loss (optional)",
+          "reasonPlaceholder": "e.g., Budget constraints, went with competitor...",
+          "cancel": "Cancel",
+          "confirm": "Confirm",
+          "updating": "Updating..."
+        },
+        "moveBackward": {
+          "title": "Move Backward?",
+          "subtitle": "You're moving this lead to an earlier stage",
+          "from": "from"
+        },
+        "assignOwner": {
+          "title": "Assign Owner",
+          "subtitle": "Assign this lead to a team member",
+          "selectUser": "Select User",
+          "selectUserPlaceholder": "Select a user...",
+          "loadingUsers": "Loading users...",
+          "noUsersAvailable": "No users available",
+          "cancel": "Cancel",
+          "assign": "Assign",
+          "assigning": "Assigning...",
+          "required": "*",
+          "selectUserError": "Please select a user",
+          "from": "from"
+        }
+      },
+
+      "deleteConfirm": "😢 Are you sure you want to delete this lead?",
+      "deleteSuccess": "Lead has been deleted successfully.",
+      "deleteFail": "Failed to delete lead.",
+      "deleted": "Deleted!",
+      "confirmYes": "Yes",
+      "confirmNo": "No",
+      "oops": "Oops!"
+    },
+
+    "leadsCount": "Leads",
+    "filterFail": "Failed to filter leads.",
+    "deleteSuccessTitle": "Deleted!",
+
+    "exportModal": {
+      "noData": "No Data to Export",
+      "success": "Export Successful!",
+      "failed": "Failed to export leads. Please try again.",
+      "failedTitle": "Export Failed"
+    },
+
+    "filters": {
+      "all": "All",
+      "new": "New",
+      "contacted": "Contacted",
+      "interested": "Interested",
+      "followup": "Followup",
+      "cold": "Cold",
+      "lost": "Lost",
+      "converted": "Converted"
+    },
+
+    "title": "Leads",
+    "subtitle": "Manage and track your sales leads pipeline",
+    "addLead": "Add Lead",
+    "totalLeads": "Total Leads",
+    "new": "New",
+    "converted": "Converted",
+    "found": "Found",
+    "searchPlaceholder": "Search by name, phone, email or source...",
+    "chooseClass": "Choose a class...",
+    "noLeadsToExport": "There are no leads to export.",
+
+    "importSuccess": "{successCount} leads imported successfully",
+    "importFail": "{failCount} leads failed to import",
+    "exportedToFile": "{count} leads exported to {filename}",
+
+    "table": {
+      "leadInfo": "Lead Info",
+      "contact": "Contact",
+      "source": "Source",
+      "status": "Status",
+      "assignedTo": "Assigned To",
+      "createdDate": "Created Date",
+      "notes": "Notes",
+      "convert": "Convert",
+      "operations": "Operations"
+    },
+
+    "status": {
+      "new": "New",
+      "contacted": "Contacted",
+      "interested": "Interested",
+      "followup": "Followup",
+      "cold": "Cold",
+      "lost": "Lost",
+      "converted": "Converted"
+    },
+
+    "unassigned": "Unassigned",
+    "viewNotes": "View notes",
+    "alreadyConverted": "Already converted",
+    "convertLead": "Convert lead",
+    "editLead": "Edit lead",
+    "deleteLead": "Delete lead",
+    "deleteConfirm": "😢 Are you sure you want to delete this lead?",
+    "confirmYes": "Yes",
+    "confirmNo": "No",
+    "deleteSuccess": "Lead has been deleted successfully.",
+    "deleteFail": "Failed to delete lead.",
+    "oops": "Oops!",
+    "loading": "Loading leads...",
+    "noLeadsFound": "No leads found matching your search",
+    "noLeadsYet": "No leads yet",
+    "show": "Show:",
+    "pageInfo": "Showing page {page} of {total} ({count} total leads, {per} per page)",
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+
+    "convertModal": {
+      "title": "Convert Lead",
+      "selectClass": "Select Class",
+      "selectClassRequired": "Please select a class.",
+      "paidAmount": "Paid Amount",
+      "paidAmountRequired": "Please enter a valid paid amount.",
+      "invalidAmount": "Invalid Amount",
+      "missingCourse": "Missing Course",
+      "cancel": "Cancel",
+      "convert": "Convert Lead",
+      "converting": "Converting...",
+      "success": "Converted!",
+      "successText": "Lead has been converted successfully.",
+      "fail": "Failed to convert lead."
+    },
+
+    "importModal": {
+      "title": "Import Leads",
+      "subtitle": "Upload CSV or Excel file",
+      "selectFile": "Select File",
+      "required": "*",
+      "clickToUpload": "Click to upload or drag and drop",
+      "fileTypes": "CSV, XLS, or XLSX (Max 10MB)",
+      "fileName": "File name",
+      "fileSize": "File size",
+      "changeFile": "Click to change file",
+      "cancel": "Cancel",
+      "import": "Import Leads",
+      "importing": "Importing...",
+      "noFileSelected": "No File Selected",
+      "selectFileText": "Please select a file to import.",
+      "requirements": {
+        "title": "File Requirements:",
+        "maxSize": "Maximum file size: 10MB",
+        "formats": "Supported formats: CSV, XLS, XLSX",
+        "requiredColumns": "Required columns: Full Name, Phone, Email",
+        "optionalColumns": "Optional: Source, Status, Assigned To"
+      },
+      "partialSuccess": "Import Partially Completed",
+      "success": "Import Successful!",
+      "failed": "Import Failed",
+      "checkFormat": "Please check your file format and try again.",
+      "andMoreErrors": "...and {count} more errors"
+    },
+
+    "export": "Export",
+    "exporting": "Exporting...",
+    "import": "Import"
+  },
+
+  "sidebar": {
+    "sections": {
+      "main": "Main",
+      "system": "System"
+    },
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard",
+    "categories": "Categories",
+    "allCategories": "All Categories",
+    "addCategory": "Add Category",
+    "courses": "Courses",
+    "allCourses": "All Courses",
+    "addCourse": "Add Course",
+    "classes": "Classes",
+    "allClasses": "All Classes",
+    "addClass": "Add Class",
+    "enrollments": "Enrollments",
+    "allEnrollments": "All Enrollments",
+    "addEnrollment": "Add Enrollment",
+    "leads": "Leads",
+    "board": "Board",
+    "allLeads": "All Leads",
+    "addLead": "Add Lead",
+    "students": "Students",
+    "allStudents": "All Students",
+    "addStudent": "Add Student",
+    "followUp": "Follow Up",
+    "allFollowUps": "All Follow Ups",
+    "addFollowUp": "Add Follow Up",
+    "users": "Users",
+    "allUsers": "All Users",
+    "addUser": "Add User",
+    "roles": "Roles",
+    "allRoles": "All Roles",
+    "addRole": "Add Role",
+    "settings": "Settings",
+    "generalSettings": "General Settings",
+    "systemConfig": "System Config",
+    "editSettings": "Edit Settings",
+    "profile": "Profile",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "advancedEdit": "Advanced Edit"
+  },
+
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Organize and manage your categories",
+    "searchPlaceholder": "Search categories by name...",
+    "noCategoriesFound": "No categories found matching your search",
+    "noCategoriesYet": "No categories yet",
+    "addTitle": "Add New Category",
+    "addSuccess": "Category added successfully",
+    "addFail": "Failed to add category",
+    "addButton": "Add Category",
+    "totalCategories": "Total Categories",
+    "categoriesFound": "Categories Found",
+    "currentPage": "Current Page",
+    "show": "Show:",
+    "pageInfo": "Showing page {current} of {total} ({count} total categories, {pageSize} per page)",
+    "table": {
+      "id": "#",
+      "name": "Category Name",
+      "operations": "Operations"
+    },
+    "deleteConfirm": "😢 Are you sure you want to delete this category?",
+    "deleteSuccess": "Category has been deleted successfully.",
+    "deleteFail": "Failed to delete category.",
+    "guidelinesTitle": "Category Guidelines",
+    "guidelines": [
+      "Use clear and descriptive names",
+      "Avoid special characters and numbers",
+      "Keep it concise (2-100 characters)",
+      "Make it easy to understand for students"
+    ],
+    "addSubtitle": "Create a new category for organizing courses",
+    "adding": "Adding...",
+    "addSuccessTitle": "Success!",
+    "addSuccessText": "Category has been added successfully.",
+    "oops": "Oops!",
+    "confirmYes": "Yes",
+    "confirmNo": "No",
+    "nameRequired": "Category name is required",
+    "nameMin": "Category name must be at least {min} characters",
+    "nameMax": "Category name must not exceed {max} characters",
+    "nameLabel": "Category Name",
+    "enterName": "Enter category name",
+    "editTitle": "Edit Category",
+    "editSubtitle": "Update category information",
+    "updateButton": "Update Category",
+    "updating": "Updating...",
+    "cancel": "Cancel",
+    "loading": "Loading categories...",
+    "goBack": "Go back",
+    "updateSuccessTitle": "Success!",
+    "updateSuccessText": "Category has been updated successfully.",
+    "quickTipsTitle": "Quick Tips",
+    "quickTips": [
+      "Choose a clear and descriptive name for the category",
+      "Category names should be unique and easy to identify",
+      "Changes will affect all associated courses"
+    ]
+  },
+
+  "courses": {
+    "title": "Courses",
+    "subtitle": "Create and manage your courses",
+    "addTitle": "Add New Course",
+    "addSuccess": "Course added successfully",
+    "addFail": "Failed to add course",
+    "cancel": "Cancel",
+    "addButton": "Add Course",
+    "totalCourses": "Total Courses",
+    "enterTitle": "Enter course title",
+    "searchPlaceholder": "Search courses by name, code or category...",
+    "noCoursesFound": "No courses found matching your search",
+    "noCoursesYet": "No courses yet",
+    "loading": "Loading courses...",
+    "deleteConfirm": "😢 Are you sure you want to delete this course?",
+    "deleteSuccess": "Course has been deleted successfully.",
+    "deleteFail": "Failed to delete course.",
+    "confirmYes": "Yes",
+    "confirmNo": "No",
+    "oops": "Oops!",
+    "found": "Found",
+    "show": "Show:",
+    "pagination": "Showing page {page} of {total} ({count} total courses, {per} per page)",
+    "table": {
+      "courseInfo": "Course Info",
+      "category": "Category",
+      "level": "Level",
+      "duration": "Duration",
+      "language": "Language",
+      "classes": "Classes",
+      "status": "Status",
+      "created": "Created",
+      "operations": "Operations"
+    },
+    "durationHours": "{hours} hrs",
+    "notSet": "Not set",
+    "editCourse": "Edit course",
+    "deleteCourse": "Delete course",
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "active": "Active",
+    "inactive": "Inactive",
+    "level": { "1": "Beginner", "2": "Intermediate", "3": "Advanced" },
+    "goBack": "Go back",
+    "addSubtitle": "Create a new course for students to enroll",
+    "editTitle": "Edit Course",
+    "editSubtitle": "Update course information",
+    "loadingCourse": "Loading course data...",
+    "courseNotFound": "Course not found",
+    "backToCourses": "Back to Courses",
+    "categoryLabel": "Category",
+    "descriptionLabel": "Description",
+    "levelLabel": "Level",
+    "updateButton": "Update Course",
+    "updating": "Updating Course...",
+    "updateSuccessTitle": "Success!",
+    "updateSuccessText": "Course has been updated successfully.",
+    "updateFail": "Failed to update course.",
+    "editingCourse": "Editing Course",
+    "editingTips": [
+      "Fill in all required fields marked with *",
+      "Optional fields can be left empty",
+      "Changes will be saved immediately upon submission"
+    ],
+    "basicInformation": "Basic Information",
+    "courseNameLabel": "Course Name",
+    "courseNamePlaceholder": "e.g., Complete Web Development Bootcamp",
+    "codeLabel": "Course Code",
+    "codePlaceholder": "e.g., WEB-101",
+    "selectCategory": "Select a category...",
+    "descriptionPlaceholder": "Provide a detailed description of the course...",
+    "courseDetails": "Course Details",
+    "durationLabel": "Duration (Hours)",
+    "languagePlaceholder": "e.g., English",
+    "learningOutcomesPlaceholder": "What will students learn? List the key outcomes...",
+    "prerequisitesPlaceholder": "What should students know before taking this course? (Optional)",
+    "tagsPlaceholder": "e.g., web, javascript, react (comma separated)",
+    "thumbnailPlaceholder": "https://example.com/image.jpg",
+    "adding": "Adding Course...",
+    "addSuccessTitle": "Success!",
+    "addSuccessText": "Course has been added successfully.",
+    "validation": {
+      "nameRequired": "Course name is required",
+      "nameMin": "Course name must be at least {min} characters",
+      "nameMax": "Course name must not exceed {max} characters",
+      "codeRequired": "Course code is required",
+      "codeMin": "Course code must be at least {min} characters",
+      "codeMax": "Course code must not exceed {max} characters",
+      "codePattern": "Course code must be uppercase letters, numbers, and hyphens only",
+      "descriptionRequired": "Description is required",
+      "descriptionMin": "Description must be at least {min} characters",
+      "descriptionMax": "Description must not exceed {max} characters",
+      "durationRequired": "Duration is required",
+      "durationPositive": "Duration must be greater than 0",
+      "durationInteger": "Duration must be a whole number",
+      "durationMax": "Duration is too high",
+      "durationType": "Duration must be a valid number",
+      "levelRequired": "Level is required",
+      "levelOneOf": "Please select a valid level",
+      "levelType": "Please select a level",
+      "learningOutcomesRequired": "Learning outcomes are required",
+      "learningOutcomesMin": "Learning outcomes must be at least {min} characters",
+      "learningOutcomesMax": "Learning outcomes must not exceed {max} characters",
+      "prerequisitesMax": "Prerequisites must not exceed {max} characters",
+      "languageMax": "Language must not exceed {max} characters",
+      "tagsMax": "Tags must not exceed {max} characters",
+      "thumbnailUrl": "Must be a valid URL",
+      "thumbnailMax": "URL must not exceed {max} characters",
+      "categoryRequired": "Category is required",
+      "categoryPositive": "Please select a category",
+      "categoryType": "Please select a category"
+    }
+  },
+
+  "classes": {
+    "title": "Classes",
+    "subtitle": "Schedule and manage class sessions",
+    "addTitle": "Add New Class",
+    "addSubtitle": "Create a new class for a course",
+    "goBack": "Back",
+    "basicInformation": "Basic Information",
+    "courseLabel": "Course",
+    "selectCourse": "Select a course",
+    "loadingCourses": "Loading courses...",
+    "enterClassName": "Enter class name",
+    "classNameLabel": "Class Name",
+    "classCodeLabel": "Class Code",
+    "codePlaceholder": "e.g., CS101-A",
+    "priceLabel": "Price",
+    "pricePlaceholder": "0.00",
+    "instructorLabel": "Instructor Name",
+    "instructorPlaceholder": "Enter instructor name",
+    "schedule": "Schedule",
+    "startDateLabel": "Start Date",
+    "endDateLabel": "End Date",
+    "daysOfWeekLabel": "Days of Week",
+    "startTimeLabel": "Start Time",
+    "endTimeLabel": "End Time",
+    "capacityTitle": "Capacity",
+    "maxStudentsLabel": "Maximum Students",
+    "maxStudentsPlaceholder": "e.g., 30",
+    "cancel": "Cancel",
+    "adding": "Adding Class...",
+    "addButton": "Add Class",
+    "addSuccessTitle": "Success!",
+    "addSuccessText": "Class has been added successfully.",
+    "addFail": "Failed to add class.",
+    "editTitle": "Edit Class",
+    "editSubtitle": "Update class information",
+    "backToClasses": "Back to Classes",
+    "classNotFound": "Class not found",
+    "loadingClass": "Loading class data...",
+    "updateButton": "Update Class",
+    "updating": "Updating...",
+    "updateSuccessTitle": "Success!",
+    "updateSuccessText": "Class has been updated successfully.",
+    "updateFail": "Failed to update class.",
+    "quickTipsTitle": "Quick Tips",
+    "quickTips": [
+      "Select the course this class belongs to",
+      "Click on the days to select when the class meets",
+      "End date and time must be after start date and time",
+      "At least one day must be selected"
+    ],
+    "manageCourseClassesSubtitle": "View and manage all classes for this course",
+    "addFirstClass": "Add First Class",
+    "searchPlaceholder": "Search by class name, code, or instructor...",
+    "table": {
+      "classInfo": "Class Info",
+      "instructor": "Instructor",
+      "schedule": "Schedule",
+      "duration": "Duration",
+      "price": "Price",
+      "capacity": "Capacity",
+      "status": "Status",
+      "changeStatus": "Change Status",
+      "operations": "Operations"
+    },
+    "notAssigned": "Not assigned",
+    "notScheduled": "Not scheduled",
+    "start": "Start",
+    "end": "End",
+    "students": "students",
+    "noClassesFound": "No classes found matching your search",
+    "noClassesYet": "No classes for this course yet",
+    "deleteConfirm": "😢 Are you sure you want to delete this class?",
+    "confirmYes": "Yes",
+    "confirmNo": "No",
+    "deleteSuccessTitle": "Deleted!",
+    "deleteSuccessText": "Class has been deleted successfully.",
+    "statusMeaningsTitle": "Status Meanings:",
+    "statusMeanings": {
+      "planned": "Planned: Class is scheduled but not yet open",
+      "open": "Open: Enrollment is open",
+      "full": "Full: Maximum capacity reached",
+      "closed": "Closed: Enrollment closed"
+    },
+    "changeStatusTitle": "Change Status",
+    "currentStatus": "Current Status",
+    "newStatus": "New Status",
+    "noChangeTitle": "No Change",
+    "noChangeText": "The selected status is the same as the current status.",
+    "statusUpdatedTitle": "Status Updated!",
+    "statusUpdatedText": "Class status has been changed to {status}.",
+    "statusUpdateFail": "Failed to update class status.",
+    "deleteFail": "Failed to delete class.",
+    "editClass": "Edit class",
+    "deleteClass": "Delete class",
+    "oops": "Oops!",
+    "validation": {
+      "courseRequired": "Course is required",
+      "selectCourse": "Please select a course",
+      "courseType": "Course must be selected",
+      "nameRequired": "Class name is required",
+      "nameMin": "Name must be at least {min} characters",
+      "nameMax": "Name must not exceed {max} characters",
+      "codeRequired": "Class code is required",
+      "codeMin": "Code must be at least {min} characters",
+      "codeMax": "Code must not exceed {max} characters",
+      "priceRequired": "Price is required",
+      "priceMin": "Price must be at least {min}",
+      "priceType": "Price must be a valid number",
+      "instructorRequired": "Instructor name is required",
+      "instructorMin": "Instructor name must be at least {min} characters",
+      "instructorMax": "Instructor name must not exceed {max} characters",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "validDate": "Please enter a valid date",
+      "endAfterStart": "End date must be after start date",
+      "daysRequired": "Days of week is required",
+      "minDays": "Please select at least one day",
+      "timeFromRequired": "Start time is required",
+      "timeToRequired": "End time is required",
+      "validTime": "Please enter a valid time (HH:MM)",
+      "timeAfterStart": "End time must be after start time",
+      "maxStudentsRequired": "Maximum students is required",
+      "maxStudentsMin": "Maximum students must be at least {min}",
+      "maxStudentsType": "Maximum students must be a valid number"
+    },
+    "status": { "0": "Planned", "1": "Open", "2": "Full", "3": "Closed" },
+    "totalClasses": "Total Classes",
+    "allClasses": "All Classes",
+    "found": "Found",
+    "filters": {
+      "all": "All Classes",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "open": "Open",
+    "full": "Full",
+    "show": "Show:",
+    "classes": "Classes",
+    "pagination": "Showing page {page} of {total} ({count} classes, {per} per page)",
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "changeStatus": "Change status",
+    "updateStatus": "Update Status",
+    "yes": "Yes",
+    "no": "No"
+  },
+
+  "students": {
+    "title": "Students",
+    "addTitle": "Add New Student",
+    "addSuccess": "Student added successfully",
+    "addFail": "Failed to add student",
+    "addButton": "Add Student",
+    "totalStudents": "Total Students",
+    "enterEmail": "Enter email address"
+  },
+
+  "enrollments": {
+    "title": "Enrollments",
+    "addTitle": "Add New Enrollment",
+    "addSuccess": "Enrollment added successfully",
+    "addFail": "Failed to add enrollment",
+    "addButton": "Add Enrollment"
+  },
+
+  "roles": {
+    "title": "Roles",
+    "subtitle": "Manage user roles and access control",
+    "rolesAndPermissions": "Roles & Permissions",
+    "manage": "Manage user roles and access control",
+    "addTitle": "Add New Role",
+    "addSuccess": "Role added successfully",
+    "addFail": "Failed to add role",
+    "addButton": "Add Role",
+    "totalRoles": "Total Roles",
+    "loading": "Loading roles...",
+    "noRolesFound": "No roles found matching your search",
+    "noRolesYet": "No roles yet",
+    "assignPermissions": "Assign permissions",
+    "editRole": "Edit Role",
+    "searchPlaceholder": "Search roles...",
+    "permissions": {
+      "title": "Permissions",
+      "searchPlaceholder": "Search permissions...",
+      "noPermissionsFound": "No permissions found matching your search",
+      "noPermissionsAvailable": "No permissions available",
+      "totalPermissions": "Total Permissions",
+      "updatedSuccess": "Role permissions updated successfully.",
+      "updatedFail": "Failed to update role permissions.",
+      "loading": "Loading role permissions...",
+      "roleNameRequired": "Role name is required."
+    },
+    "deleteConfirm": "😢 Are you sure you want to delete this role?",
+    "deleteSuccess": "Role has been deleted successfully.",
+    "deleteFail": "Failed to delete role.",
+    "found": "Found"
+  }
+}
