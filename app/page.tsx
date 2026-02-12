@@ -114,15 +114,15 @@ const getStageColor = (stage: string) =>
 const fmt = (n: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "EGP",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(n);
 
 const fmtCompact = (n: number) => {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
-  return `$${n}`;
+  if (n >= 1_000_000) return `EGP ${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `EGP ${(n / 1_000).toFixed(0)}K`;
+  return `EGP ${n}`;
 };
 
 const fmtNum = (n: number) => new Intl.NumberFormat("en-US").format(n);

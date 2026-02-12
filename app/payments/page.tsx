@@ -242,7 +242,7 @@ const PaymentsPage = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "EGP",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount);
@@ -325,7 +325,7 @@ const PaymentsPage = () => {
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-green-600" />
+                <div className="w-6 h-6 text-green-600">EGP</div>
               </div>
             </div>
           </div>
