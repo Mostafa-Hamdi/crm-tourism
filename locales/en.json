@@ -69,6 +69,85 @@
     ]
   },
   "leads": {
+    "details": {
+      "loading": "Loading lead details...",
+      "backToLeads": "Back to Leads",
+      "error": {
+        "title": "Lead Not Found",
+        "message": "The lead you're looking for doesn't exist or has been removed."
+      },
+      "header": {
+        "score": "Score",
+        "lastActivity": "Last activity",
+        "journey": {
+          "title": "Lead Journey",
+          "complete": "complete"
+        }
+      },
+      "quickActions": {
+        "whatsApp": "WhatsApp",
+        "addNote": "Add Note",
+        "addTask": "Add Task",
+        "archive": "Delete"
+      },
+      "stages": {
+        "title": "Pipeline Stages",
+        "current": "Current",
+        "clickToMove": "Click to move"
+      },
+      "stageHistory": {
+        "title": "Stage History",
+        "unknownStage": "Unknown Stage",
+        "changedBy": "Changed by"
+      },
+      "activityTimeline": {
+        "title": "Activity Timeline",
+        "noActivities": "No activities yet",
+        "duration": "Duration",
+        "min": "min",
+        "sec": "sec",
+        "result": "Result",
+        "by": "by"
+      },
+      "leadDetailsSection": {
+        "title": "Lead Details",
+        "source": "Source",
+        "unknown": "Unknown",
+        "budget": "Budget",
+        "interestedIn": "Interested In",
+        "location": "Location",
+        "assignedTo": "Assigned To",
+        "unassigned": "Unassigned"
+      },
+      "smartInsights": {
+        "title": "Smart Insights",
+        "leadScore": "Lead Score",
+        "lastActivity": "Last Activity",
+        "daysInPipeline": "Days in Pipeline",
+        "days": "days"
+      },
+      "stageChangeConfirm": {
+        "title": "Confirm Stage Change",
+        "message": "Are you sure you want to move this lead to",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      },
+      "deleteConfirm": {
+        "title": "Delete Lead?",
+        "confirmYes": "Yes, Delete",
+        "confirmNo": "Cancel",
+        "successTitle": "Deleted!",
+        "successMessage": "Lead has been deleted successfully.",
+        "errorTitle": "Error",
+        "errorMessage": "Failed to delete lead. Please try again."
+      },
+      "timeAgo": {
+        "justNow": "Just now",
+        "minutesAgo": "{minutes} minutes ago",
+        "hoursAgo": "{hours} hours ago",
+        "daysAgo": "{days} days ago"
+      }
+    },
     "addNote": {
       "title": "Add Note",
       "subtitle": "Add a note or interaction to this lead",

@@ -69,6 +69,85 @@
     ]
   },
   "leads": {
+    "details": {
+      "loading": "جاري تحميل تفاصيل العميل المحتمل...",
+      "backToLeads": "العودة إلى العملاء المحتملين",
+      "error": {
+        "title": "العميل المحتمل غير موجود",
+        "message": "العميل المحتمل الذي تبحث عنه غير موجود أو تم حذفه."
+      },
+      "header": {
+        "score": "النقاط",
+        "lastActivity": "آخر نشاط",
+        "journey": {
+          "title": "رحلة العميل",
+          "complete": "مكتمل"
+        }
+      },
+      "quickActions": {
+        "whatsApp": "واتساب",
+        "addNote": "إضافة ملاحظة",
+        "addTask": "إضافة مهمة",
+        "archive": "حذف"
+      },
+      "stages": {
+        "title": "مراحل المسار",
+        "current": "الحالية",
+        "clickToMove": "انقر للنقل"
+      },
+      "stageHistory": {
+        "title": "تاريخ المراحل",
+        "unknownStage": "مرحلة غير معروفة",
+        "changedBy": "تم التغيير بواسطة"
+      },
+      "activityTimeline": {
+        "title": "الجدول الزمني للأنشطة",
+        "noActivities": "لا توجد أنشطة بعد",
+        "duration": "المدة",
+        "min": "دقيقة",
+        "sec": "ثانية",
+        "result": "النتيجة",
+        "by": "بواسطة"
+      },
+      "leadDetailsSection": {
+        "title": "تفاصيل العميل المحتمل",
+        "source": "المصدر",
+        "unknown": "غير معروف",
+        "budget": "الميزانية",
+        "interestedIn": "مهتم بـ",
+        "location": "الموقع",
+        "assignedTo": "مُعين إلى",
+        "unassigned": "غير مُعين"
+      },
+      "smartInsights": {
+        "title": "رؤى ذكية",
+        "leadScore": "نقاط العميل المحتمل",
+        "lastActivity": "آخر نشاط",
+        "daysInPipeline": "الأيام في المسار",
+        "days": "أيام"
+      },
+      "stageChangeConfirm": {
+        "title": "تأكيد تغيير المرحلة",
+        "message": "هل أنت متأكد من نقل هذا العميل المحتمل إلى",
+        "confirm": "تأكيد",
+        "cancel": "إلغاء"
+      },
+      "deleteConfirm": {
+        "title": "حذف العميل المحتمل؟",
+        "confirmYes": "نعم، احذف",
+        "confirmNo": "إلغاء",
+        "successTitle": "تم الحذف!",
+        "successMessage": "تم حذف العميل المحتمل بنجاح.",
+        "errorTitle": "خطأ",
+        "errorMessage": "فشل حذف العميل المحتمل. يرجى المحاولة مرة أخرى."
+      },
+      "timeAgo": {
+        "justNow": "الآن",
+        "minutesAgo": "منذ {minutes} دقيقة",
+        "hoursAgo": "منذ {hours} ساعة",
+        "daysAgo": "منذ {days} يوم"
+      }
+    },
     "addNote": {
       "title": "إضافة ملاحظة",
       "subtitle": "إضافة ملاحظة أو تفاعل لهذا العميل المحتمل",

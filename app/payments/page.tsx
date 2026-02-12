@@ -576,7 +576,7 @@ const PaymentsPage = () => {
                       onClick={() => handleSort("studentName")}
                     >
                       <div className="flex items-center gap-2">
-                        Student
+                        Traveler
                         {sortConfig?.key === "studentName" && (
                           <>
                             {sortConfig.direction === "asc" ? (
@@ -589,7 +589,7 @@ const PaymentsPage = () => {
                       </div>
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Course & Class
+                      Trip
                     </th>
                     <th
                       className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-blue-50 transition-colors"
@@ -636,9 +636,6 @@ const PaymentsPage = () => {
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       Created By
-                    </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -724,11 +721,6 @@ const PaymentsPage = () => {
                             <User className="w-3.5 h-3.5" />
                             {payment.createdBy}
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <button className="p-2 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer">
-                            <Eye className="w-4 h-4 text-blue-600" />
-                          </button>
                         </td>
                       </tr>
                     );
