@@ -34,27 +34,6 @@ interface CustomerActivity {
   createdAt: string;
 }
 
-// interface Customer {
-//   id: number;
-//   fullName: string;
-//   displayName: string;
-//   gender: string | null;
-//   dateOfBirth: string | null;
-//   nationalId: string | null;
-//   profile: string | null;
-//   meta: {
-//     isActive: boolean;
-//     isArchived: boolean;
-//     createdAt: string;
-//     lastInteractionAt: string | null;
-//   };
-//   contacts: any[];
-//   tags: any[];
-//   activities: CustomerActivity[];
-// }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 const formatDate = (dateString: string) => {
   if (!dateString) return "—";
   return new Date(dateString).toLocaleDateString("en-US", {
