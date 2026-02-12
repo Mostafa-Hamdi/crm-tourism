@@ -82,7 +82,7 @@ const Page = () => {
       await Swal.fire({
         icon: "success",
         title: "Success!",
-        text: "Student has been enrolled successfully.",
+        text: "Booking has been created successfully.",
         timer: 2000,
         showConfirmButton: false,
       });
@@ -90,7 +90,7 @@ const Page = () => {
       reset();
       router.push("/enrollments");
     } catch (err: any) {
-      let errorMessage = "Failed to enroll student.";
+      let errorMessage = "Failed to create booking.";
 
       if (err?.data) {
         if (typeof err.data === "string") {
