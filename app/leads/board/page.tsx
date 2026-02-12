@@ -88,14 +88,13 @@ interface AssignOwnerDialog {
 }
 
 const STATUS_TO_STAGE: { [key: number]: string } = {
-  0: "new",
   1: "new",
   2: "contacted",
   3: "qualified",
   4: "proposal",
-  5: "negotiation",
+  7: "negotiation",
   6: "lost",
-  7: "won",
+  5: "won",
 };
 
 const STAGE_TO_STATUS: { [key: string]: number } = {
@@ -103,9 +102,9 @@ const STAGE_TO_STATUS: { [key: string]: number } = {
   contacted: 2,
   qualified: 3,
   proposal: 4,
-  negotiation: 5,
+  negotiation: 7,
   lost: 6,
-  won: 7,
+  won: 5,
 };
 
 const transformApiLead = (apiLead: ApiLeadInStage, stageId: number): Lead => {

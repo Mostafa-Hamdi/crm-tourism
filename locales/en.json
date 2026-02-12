@@ -659,6 +659,8 @@
   },
 
   "sidebar": {
+    "customers": "Customers",
+    "allCustomers": "All Customers",
     "sections": {
       "main": "Main",
       "system": "System"
@@ -699,8 +701,7 @@
     "editSettings": "Edit Settings",
     "profile": "Profile",
     "editProfile": "Edit Profile",
-    "changePassword": "Change Password",
-    "advancedEdit": "Advanced Edit"
+    "changePassword": "Change Password"
   },
 
   "categories": {

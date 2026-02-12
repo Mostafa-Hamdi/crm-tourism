@@ -107,9 +107,9 @@ const Page = () => {
       2: "status.contacted",
       3: "status.interested",
       4: "status.followup",
-      5: "status.cold",
+      7: "status.cold",
       6: "status.lost",
-      7: "status.converted",
+      5: "status.converted",
     };
     return t(statusKeys[status] || "status.new");
   };
@@ -295,9 +295,9 @@ const Page = () => {
       2: "from-purple-100 to-pink-100 border-purple-200 text-purple-700",
       3: "from-green-100 to-emerald-100 border-green-200 text-green-700",
       4: "from-yellow-100 to-orange-100 border-yellow-200 text-yellow-700",
-      5: "from-gray-100 to-slate-100 border-gray-200 text-gray-700",
+      7: "from-gray-100 to-slate-100 border-gray-200 text-gray-700",
       6: "from-red-100 to-rose-100 border-red-200 text-red-700",
-      7: "from-emerald-100 to-teal-100 border-emerald-200 text-emerald-700",
+      5: "from-emerald-100 to-teal-100 border-emerald-200 text-emerald-700",
     };
     return (
       colors[status] ||
@@ -717,7 +717,7 @@ const Page = () => {
                 color: "from-yellow-600 to-orange-600",
               },
               {
-                id: 5,
+                id: 7,
                 label: t("filters.cold"),
                 icon: Pause,
                 color: "from-gray-600 to-slate-600",
@@ -729,7 +729,7 @@ const Page = () => {
                 color: "from-red-600 to-rose-600",
               },
               {
-                id: 7,
+                id: 5,
                 label: t("filters.converted"),
                 icon: CheckCircle,
                 color: "from-emerald-600 to-teal-600",

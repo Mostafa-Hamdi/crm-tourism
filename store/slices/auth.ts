@@ -7,6 +7,7 @@ export interface User {
   fullName: string;
   email: string;
   roles: string[];
+  id: number;
   permissions: string[];
 }
 
@@ -36,6 +37,7 @@ interface AuthPayload {
   fullName: string;
   email: string;
   roles: string[];
+  id: number;
   permissions: string[];
 }
 
@@ -52,6 +54,7 @@ const authSlice = createSlice({
         fullName: action.payload.fullName,
         email: action.payload.email,
         roles: action.payload.roles,
+        id: action.payload.id,
         permissions: action.payload.permissions,
       };
       state.isAuthenticated = true;

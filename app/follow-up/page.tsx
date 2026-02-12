@@ -158,9 +158,9 @@ const Page = () => {
     2: "Contacted",
     3: "Interested",
     4: "Followup",
-    5: "Cold",
+    7: "Cold",
     6: "Lost",
-    7: "Converted",
+    5: "Converted",
   };
   const handleDatePicker = (e: any) => {
     e.target.showPicker();
@@ -409,9 +409,9 @@ const Page = () => {
                                       ? "bg-yellow-100 text-yellow-700"
                                       : followup.status === 4
                                         ? "bg-purple-100 text-purple-700"
-                                        : followup.status === 5
+                                        : followup.status === 7
                                           ? "bg-orange-100 text-orange-700"
-                                          : followup.status === 6
+                                          : followup.status === 5
                                             ? "bg-emerald-100 text-emerald-700"
                                             : followup.status === 7
                                               ? "bg-red-100 text-red-700"

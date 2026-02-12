@@ -18,6 +18,7 @@ interface LoginResponse {
   email: string;
   roles: string[];
   permissions: string[];
+  id: number;
 }
 
 interface RefreshResponse {
@@ -101,6 +102,7 @@ export const api = createApi({
     "CourseClasses",
     "RolePermissions",
     "FollowUps",
+    "Customers",
   ],
   endpoints: (builder) => ({
     /* =========================
@@ -117,6 +119,10 @@ export const api = createApi({
         async onQueryStarted(_, { dispatch, queryFulfilled }) {
           try {
             const { data } = await queryFulfilled;
+            console.log(
+              "Login successful, dispatching setAuth with data:",
+              data,
+            );
             dispatch(setAuth(data));
           } catch {
             // handled by UI
@@ -178,6 +184,17 @@ export const api = createApi({
         url: `/users/${id}/reset-password`,
         method: "PUT",
         body: { newPassword },
+      }),
+      invalidatesTags: ["Users"],
+    }),
+    updateProfile: builder.mutation<
+      void,
+      { id: number; fullName: string; email: string; isActive: boolean }
+    >({
+      query: ({ id, fullName, email, isActive }) => ({
+        url: `/Users/${id}`,
+        method: "PUT",
+        body: { fullName, email, isActive },
       }),
       invalidatesTags: ["Users"],
     }),
@@ -918,6 +935,27 @@ export const api = createApi({
       }),
       invalidatesTags: ["RolePermissions", "Roles"],
     }),
+    // GET /api/leads/follow-ups - Get all follow-ups (QUERY - auto-fetch)
+    getSpecificCustomers: builder.mutation<
+      { data: any },
+      { pageNumber: number; pageSize: number }
+    >({
+      query: ({ pageNumber, pageSize }) => ({
+        url: `/customers?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+        method: "GET",
+      }),
+    }),
+    getCustomer: builder.query<any, { id: number }>({
+      query: ({ id }) => `/Customers/${id}`,
+      providesTags: ["Customers"],
+    }),
+    deleteCustomers: builder.mutation<void, { id: number }>({
+      query: ({ id }) => ({
+        url: `/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Customers"],
+    }),
   }),
 });
 
@@ -936,6 +974,7 @@ export const {
   useAddUserMutation,
   useToggleUserStatusMutation,
   useResetPassMutation,
+  useUpdateProfileMutation,
 
   // Roles & Permissions
   useGetRolesQuery,
@@ -1015,4 +1054,8 @@ export const {
   // Lead Import/Export
   useImportLeadsMutation,
   useExportLeadsMutation,
+
+  useGetSpecificCustomersMutation,
+  useDeleteCustomersMutation,
+  useGetCustomerQuery,
 } = api;

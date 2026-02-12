@@ -19,6 +19,7 @@ import {
   School,
   SchoolIcon,
   KanbanSquare,
+  User,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -290,8 +291,7 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
               </div>
             )}
 
-            {/* Students */}
-            {hasPermission("STUDENTS_VIEW") && (
+            {hasPermission("CUSTOMERS_VIEW") && (
               <div>
                 <button
                   onClick={() => toggleDropdown("students")}
@@ -303,11 +303,11 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                 >
                   <div className="flex items-center gap-3">
                     <UserSquare className="w-5 h-5" />
-                    <span className="font-medium">{t("students")}</span>
+                    <span className="font-medium">{t("customers")}</span>
                   </div>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["students"] ? "rotate-180" : ""
+                      openDropdowns["customers"] ? "rotate-180" : ""
                     }`}
                   />
                 </button>
@@ -322,40 +322,40 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                   <div
                     className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
                   >
-                    {hasPermission("STUDENTS_VIEW") && (
+                    {hasPermission("CUSTOMERS_VIEW") && (
                       <Link
-                        href="/students"
+                        href="/customers"
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/students")
+                          isLinkActive("/customers")
                             ? "bg-blue-50 text-blue-600 font-medium"
                             : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                         }`}
                       >
                         <List className="w-4 h-4" />
-                        <span>{t("allStudents")}</span>
+                        <span>{t("allCustomers")}</span>
                       </Link>
                     )}
 
-                    {hasPermission("STUDENTS_CREATE") && (
+                    {/* {hasPermission("CUSTOMERS_CREATE") && (
                       <Link
-                        href="/students/add"
+                        href="/customers/add"
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/students/add")
+                          isLinkActive("/customers/add")
                             ? "bg-blue-50 text-blue-600 font-medium"
                             : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                         }`}
                       >
                         <Plus className="w-4 h-4" />
-                        <span>{t("addStudent")}</span>
+                        <span>{t("addCustomer")}</span>
                       </Link>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>
             )}
 
             {/* Follow-up */}
-            {hasPermission("FOLLOWUPS_VIEW") && (
+            {hasPermission("LEADS_VIEW") && (
               <div>
                 <button
                   onClick={() => toggleDropdown("followups")}
@@ -391,7 +391,7 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                   <div
                     className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
                   >
-                    {hasPermission("FOLLOWUPS_VIEW") && (
+                    {hasPermission("LEADS_VIEW") && (
                       <Link
                         href="/follow-up"
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
@@ -405,7 +405,7 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                       </Link>
                     )}
 
-                    {hasPermission("FOLLOWUPS_CREATE") && (
+                    {hasPermission("LEADS_EDIT") && (
                       <Link
                         href="/follow-up/add"
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
@@ -649,9 +649,9 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                   onClick={() => toggleDropdown("profile")}
                   className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
                     isDropdownActive([
-                      "/dashboard/profile",
-                      "/dashboard/profile/password",
-                      "/dashboard/profile/edit",
+                      "/profile",
+                      "/profile/reset-password",
+                      "/profile/edit",
                     ])
                       ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
                       : "text-gray-700 hover:bg-blue-50"
@@ -679,9 +679,20 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                     className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
                   >
                     <Link
-                      href="/dashboard/profile"
+                      href="/profile"
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/dashboard/profile")
+                        isLinkActive("/profile")
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
+                    >
+                      <User className="w-4 h-4" />
+                      <span>{t("profile")}</span>
+                    </Link>
+                    <Link
+                      href="/profile/edit"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                        isLinkActive("/profile/edit")
                           ? "bg-blue-50 text-blue-600 font-medium"
                           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
@@ -691,27 +702,15 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                     </Link>
 
                     <Link
-                      href="/dashboard/profile/password"
+                      href="/profile/reset-password"
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/dashboard/profile/password")
+                        isLinkActive("/profile/reset-password")
                           ? "bg-blue-50 text-blue-600 font-medium"
                           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                     >
                       <Edit className="w-4 h-4" />
                       <span>{t("changePassword")}</span>
-                    </Link>
-
-                    <Link
-                      href="/dashboard/profile/edit"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/dashboard/profile/edit")
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <EditIcon className="w-4 h-4" />
-                      <span>{t("advancedEdit")}</span>
                     </Link>
                   </div>
                 </div>

@@ -639,6 +639,8 @@
     "import": "استيراد"
   },
   "sidebar": {
+    "customers": "العملاء",
+    "allCustomers": "جميع العملاء",
     "sections": { "main": "الرئيسية", "system": "النظام" },
     "signOut": "تسجيل الخروج",
     "dashboard": "لوحة التحكم",
@@ -676,8 +678,7 @@
     "editSettings": "تعديل الإعدادات",
     "profile": "الملف الشخصي",
     "editProfile": "تعديل الملف الشخصي",
-    "changePassword": "تغيير كلمة المرور",
-    "advancedEdit": "تعديل متقدم"
+    "changePassword": "تغيير كلمة المرور"
   },
   "categories": {
     "title": "الفئات",
