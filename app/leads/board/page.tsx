@@ -669,7 +669,7 @@ const Page = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "EGP",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -807,9 +807,6 @@ const Page = () => {
                   {formatCurrency(stats.totalValue)}
                 </p>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-purple-600" />
-              </div>
             </div>
           </div>
 
@@ -823,9 +820,9 @@ const Page = () => {
                   {formatCurrency(stats.wonValue)}
                 </p>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl flex items-center justify-center">
+              {/* <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl flex items-center justify-center">
                 <DollarSign className="w-6 h-6 text-orange-600" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -1140,7 +1137,7 @@ const Page = () => {
                             {/* Deal Value */}
                             <div className="mb-3 px-3 py-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
                               <div className="flex items-center gap-2">
-                                <DollarSign className="w-4 h-4 text-green-600" />
+                                {/* <DollarSign className="w-4 h-4 text-green-600" /> */}
                                 <span className="font-bold text-green-700">
                                   {formatCurrency(lead.dealValue)}
                                 </span>
