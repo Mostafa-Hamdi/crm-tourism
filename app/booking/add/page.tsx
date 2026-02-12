@@ -92,13 +92,13 @@ const Page = () => {
     } catch (err: any) {
       let errorMessage = "Failed to create booking.";
 
-      if (err?.data) {
-        if (typeof err.data === "string") {
-          errorMessage = err.data;
-        } else if (err.data?.message) {
-          errorMessage = err.data.message;
-        }
-      }
+      // if (err?.data) {
+      //   if (typeof err.data === "string") {
+      //     errorMessage = err.data;
+      //   } else if (err.data?.message) {
+      //     errorMessage = err.data.message;
+      //   }
+      // }
 
       Swal.fire({
         icon: "error",
