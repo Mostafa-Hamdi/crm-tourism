@@ -247,7 +247,6 @@ const PaymentsPage = () => {
       maximumFractionDigits: 2,
     }).format(amount);
   };
-
   // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
