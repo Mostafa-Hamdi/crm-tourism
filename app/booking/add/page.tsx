@@ -137,11 +137,10 @@ const Page = () => {
 
             <div>
               <h1 className="text-3xl sm:text-4xl leading-[50px]  font-bold bg-gradient-to-r from-blue-700 via-cyan-600 to-blue-800 bg-clip-text text-transparent">
-                Add Enrollment
+                Add Booking
               </h1>
               <p className="text-gray-600 mt-2 text-sm sm:text-base">
-                Enroll a student in a course by filling out the information
-                below.
+                Book a trip by filling out the information below.
               </p>
             </div>
           </div>
@@ -150,11 +149,11 @@ const Page = () => {
         {/* Form Card */}
         <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-blue-500/10">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Enrollment Information Section */}
+            {/* Booking Information Section */}
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <GraduationCap className="w-5 h-5 text-blue-600" />
-                Enrollment Information
+                Booking Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Student Selection */}
@@ -163,7 +162,7 @@ const Page = () => {
                     htmlFor="studentId"
                     className="block text-sm font-semibold text-gray-700 mb-2"
                   >
-                    Select Student <span className="text-red-500">*</span>
+                    Select traveler <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
@@ -179,8 +178,8 @@ const Page = () => {
                     >
                       <option value={0}>
                         {studentsLoading
-                          ? "Loading students..."
-                          : "Select a student..."}
+                          ? "Loading travelers..."
+                          : "Select a traveler..."}
                       </option>
                       {students?.data?.map((student: Student) => (
                         <option key={student.id} value={student.id}>
@@ -204,7 +203,7 @@ const Page = () => {
                     htmlFor="courseId"
                     className="block text-sm font-semibold text-gray-700 mb-2"
                   >
-                    Select Class <span className="text-red-500">*</span>
+                    Select trip <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
@@ -220,8 +219,8 @@ const Page = () => {
                     >
                       <option value={0}>
                         {classesLoading
-                          ? "Loading classes..."
-                          : "Select a class..."}
+                          ? "Loading trips..."
+                          : "Select a trip..."}
                       </option>
                       {classes?.data?.map((cls: Class) => (
                         <option key={cls.id} value={cls.id}>
@@ -251,11 +250,11 @@ const Page = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-blue-900 mb-1">
-                    Enrollment Information
+                    Booking Information
                   </h3>
                   <p className="text-sm text-blue-700">
-                    Make sure to select the correct student and course before
-                    submitting. The enrollment date will be set to today by
+                    Make sure to select the correct traveler and trip before
+                    submitting. The booking date will be set to today by
                     default.
                   </p>
                 </div>
@@ -279,12 +278,12 @@ const Page = () => {
                 {isLoading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Enrolling Student...</span>
+                    <span>Booking Trip...</span>
                   </>
                 ) : (
                   <>
                     <CheckCircle className="w-5 h-5" />
-                    <span>Enroll Student</span>
+                    <span>Book Trip</span>
                   </>
                 )}
               </button>

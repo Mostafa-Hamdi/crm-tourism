@@ -1,7 +1,5 @@
 import {
   Home,
-  Boxes,
-  GraduationCap,
   UserCheck,
   UserPlus,
   UserSquare,
@@ -15,11 +13,12 @@ import {
   Plus,
   Edit,
   List,
-  EditIcon,
-  School,
-  SchoolIcon,
   KanbanSquare,
   User,
+  CreditCard,
+  EditIcon,
+  BookImageIcon,
+  Plane,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -39,6 +38,28 @@ interface SidebarProps {
   sidebarOpen: boolean;
 }
 
+// ─── Nav config types ─────────────────────────────────────────────────────────
+
+interface NavChild {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  permission?: string;
+  alwaysShow?: boolean;
+}
+
+interface NavItem {
+  key: string;
+  label: string;
+  icon: React.ElementType;
+  permission?: string;
+  alwaysShow?: boolean;
+  activeLinks: string[];
+  children: NavChild[];
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+
 const Sidebar = ({ sidebarOpen }: SidebarProps) => {
   const permissions = useSelector((state: any) => state.auth.user?.permissions);
   const isLogin = useSelector((state: any) => state.auth.isAuthenticated);
@@ -51,47 +72,351 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
   const todayCount = useSelector(selectTodayCount);
   const [triggerToday] = useGetFollowupsTodayMutation();
 
-  // Fetch today's follow-up count when sidebar mounts so the badge is available across the app
+  const t = useTranslations("sidebar");
+  const isRTL = useIsRTL();
+
+  // Fetch today's follow-up count on mount
   useEffect(() => {
     let mounted = true;
-
     (async () => {
       try {
         const res = await triggerToday();
         if (!mounted) return;
         const data = "data" in res ? (res as any).data : res;
         const count = Array.isArray(data) ? data.length : 0;
-        // Dispatch the update to the followups slice for immediate UI update
         dispatch(setTodayCount(count));
-      } catch (e) {
-        // ignore errors for the badge
+      } catch {
+        // ignore badge fetch errors
       }
     })();
-
     return () => {
       mounted = false;
     };
   }, [triggerToday]);
 
-  const t = useTranslations("sidebar");
-  const isRTL = useIsRTL();
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
-  const toggleDropdown = (label: string) => {
-    setOpenDropdowns((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
+  const hasPermission = (permission: string): boolean => {
+    if (!permissions) return false;
+    return isLogin && permissions.includes(permission);
   };
 
-  const isDropdownActive = (links: string[]): boolean => {
-    return links.some(
-      (link) => path === link || (path.startsWith(link + "/") && link !== "/"),
+  const isLinkActive = (link: string): boolean =>
+    path === link || (path.startsWith(link + "/") && link !== "/");
+
+  const isDropdownActive = (links: string[]): boolean =>
+    links.some((link) => isLinkActive(link));
+
+  const toggleDropdown = (key: string) => {
+    setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Auto-open dropdown if a child is currently active
+  useEffect(() => {
+    const updates: Record<string, boolean> = {};
+    mainNavItems.forEach((item) => {
+      if (isDropdownActive(item.activeLinks)) {
+        updates[item.key] = true;
+      }
+    });
+    systemNavItems.forEach((item) => {
+      if (isDropdownActive(item.activeLinks)) {
+        updates[item.key] = true;
+      }
+    });
+    if (Object.keys(updates).length > 0) {
+      setOpenDropdowns((prev) => ({ ...prev, ...updates }));
+    }
+  }, [path]);
+
+  // ── Nav definitions ────────────────────────────────────────────────────────
+
+  const mainNavItems: NavItem[] = [
+    {
+      key: "bookings",
+      label: t("bookings"),
+      icon: Plane,
+      permission: "ENROLLMENTS_VIEW",
+      activeLinks: ["/booking", "/booking/add"],
+      children: [
+        {
+          href: "/booking",
+          label: t("allBookings"),
+          icon: List,
+          permission: "ENROLLMENTS_VIEW",
+        },
+        {
+          href: "/booking/add",
+          label: t("addBooking"),
+          icon: Plus,
+          permission: "ENROLLMENTS_CREATE",
+        },
+      ],
+    },
+    {
+      key: "leads",
+      label: t("leads"),
+      icon: UserPlus,
+      permission: "LEADS_VIEW",
+      activeLinks: ["/leads/board", "/leads", "/leads/add"],
+      children: [
+        {
+          href: "/leads/board",
+          label: t("board"),
+          icon: KanbanSquare,
+          alwaysShow: true,
+        },
+        {
+          href: "/leads",
+          label: t("allLeads"),
+          icon: List,
+          permission: "LEADS_VIEW",
+        },
+        {
+          href: "/leads/add",
+          label: t("addLead"),
+          icon: Plus,
+          permission: "LEADS_CREATE",
+        },
+      ],
+    },
+    {
+      key: "customers",
+      label: t("customers"),
+      icon: UserSquare,
+      permission: "CUSTOMERS_VIEW",
+      activeLinks: ["/customers", "/customers/add"],
+      children: [
+        {
+          href: "/customers",
+          label: t("allCustomers"),
+          icon: List,
+          permission: "CUSTOMERS_VIEW",
+        },
+      ],
+    },
+    {
+      key: "followups",
+      label: t("followUp"),
+      icon: Clock,
+      permission: "LEADS_VIEW",
+      activeLinks: ["/follow-up", "/follow-up/add"],
+      children: [
+        {
+          href: "/follow-up",
+          label: t("allFollowUps"),
+          icon: List,
+          permission: "LEADS_VIEW",
+        },
+        {
+          href: "/follow-up/add",
+          label: t("addFollowUp"),
+          icon: Plus,
+          permission: "LEADS_EDIT",
+        },
+      ],
+    },
+    {
+      key: "payments",
+      label: t("payments"),
+      icon: CreditCard,
+      alwaysShow: true,
+      activeLinks: ["/payments", "/payments/add"],
+      children: [
+        {
+          href: "/payments",
+          label: t("allPayments"),
+          icon: List,
+          alwaysShow: true,
+        },
+        {
+          href: "/payments/add",
+          label: t("addPayment"),
+          icon: Plus,
+          alwaysShow: true,
+        },
+      ],
+    },
+  ];
+
+  const systemNavItems: NavItem[] = [
+    {
+      key: "users",
+      label: t("users"),
+      icon: UserCircle,
+      permission: "USERS_VIEW",
+      activeLinks: ["/users", "/users/add"],
+      children: [
+        {
+          href: "/users",
+          label: t("allUsers"),
+          icon: List,
+          permission: "USERS_VIEW",
+        },
+        {
+          href: "/users/add",
+          label: t("addUser"),
+          icon: Plus,
+          permission: "USERS_CREATE",
+        },
+      ],
+    },
+    {
+      key: "roles",
+      label: t("roles"),
+      icon: Shield,
+      permission: "ROLES_VIEW",
+      activeLinks: ["/roles", "/roles/add"],
+      children: [
+        {
+          href: "/roles",
+          label: t("allRoles"),
+          icon: List,
+          permission: "ROLES_VIEW",
+        },
+        {
+          href: "/roles/add",
+          label: t("addRole"),
+          icon: Plus,
+          permission: "ROLES_CREATE",
+        },
+      ],
+    },
+    {
+      key: "settings",
+      label: t("settings"),
+      icon: Settings,
+      permission: "SETTINGS_VIEW",
+      activeLinks: [
+        "/dashboard/settings",
+        "/dashboard/settings/config",
+        "/dashboard/settings/edit",
+      ],
+      children: [
+        {
+          href: "/dashboard/settings",
+          label: t("generalSettings"),
+          icon: Edit,
+          permission: "SETTINGS_GENERAL",
+        },
+        {
+          href: "/dashboard/settings/config",
+          label: t("systemConfig"),
+          icon: Edit,
+          permission: "SETTINGS_CONFIG",
+        },
+        {
+          href: "/dashboard/settings/edit",
+          label: t("editSettings"),
+          icon: EditIcon,
+          permission: "SETTINGS_EDIT",
+        },
+      ],
+    },
+    {
+      key: "profile",
+      label: t("profile"),
+      icon: UserCircle2,
+      alwaysShow: true,
+      activeLinks: ["/profile", "/profile/reset-password", "/profile/edit"],
+      children: [
+        { href: "/profile", label: t("profile"), icon: User, alwaysShow: true },
+        {
+          href: "/profile/edit",
+          label: t("editProfile"),
+          icon: Edit,
+          alwaysShow: true,
+        },
+        {
+          href: "/profile/reset-password",
+          label: t("changePassword"),
+          icon: Edit,
+          alwaysShow: true,
+        },
+      ],
+    },
+  ];
+
+  // ── Render helpers ─────────────────────────────────────────────────────────
+
+  const shouldShowItem = (item: NavItem | NavChild): boolean => {
+    if ("alwaysShow" in item && item.alwaysShow) return true;
+    if (!item.permission) return isLogin;
+    return hasPermission(item.permission);
+  };
+
+  const renderNavItem = (item: NavItem) => {
+    if (!shouldShowItem(item)) return null;
+
+    const isActive = isDropdownActive(item.activeLinks);
+    const isOpen = openDropdowns[item.key];
+    const Icon = item.icon;
+    const isBadgeItem = item.key === "followups"; //|| item.key === "payments"
+
+    const visibleChildren = item.children.filter(shouldShowItem);
+    if (visibleChildren.length === 0) return null;
+
+    return (
+      <div key={item.key}>
+        <button
+          onClick={() => toggleDropdown(item.key)}
+          className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+            isActive
+              ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
+              : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <Icon className="w-5 h-5 flex-shrink-0" />
+            <span className="font-medium">{item.label}</span>
+            {isBadgeItem && todayCount > 0 && (
+              <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                {todayCount}
+              </span>
+            )}
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        <div
+          className={`overflow-hidden transition-all duration-300 ${
+            isOpen ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div
+            className={`${
+              isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"
+            } border-blue-200 space-y-1 py-1`}
+          >
+            {visibleChildren.map((child) => {
+              const ChildIcon = child.icon;
+              const childActive = isLinkActive(child.href);
+              return (
+                <Link
+                  key={child.href}
+                  href={child.href}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                    childActive
+                      ? "bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-600 font-semibold border border-blue-100"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
+                >
+                  <ChildIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>{child.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     );
   };
 
-  const isLinkActive = (link: string): boolean => {
-    return path === link || (path.startsWith(link + "/") && link !== "/");
-  };
+  // ── Logout ─────────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -115,617 +440,64 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
     }
   };
 
-  // Helper function to check if user has permission
-  const hasPermission = (permission: string): boolean => {
-    if (!permissions) return false;
-    return isLogin && permissions.includes(permission);
-  };
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <aside
       className={`
         fixed ${isRTL ? "right-0" : "left-0"} top-[98px] z-30 h-[calc(100vh-98px)] w-64
-        bg-white/95 backdrop-blur-xl ${isRTL ? "border-l" : "border-r"} border-blue-100 shadow-lg
+        bg-white/95 backdrop-blur-xl ${isRTL ? "border-l" : "border-r"} border-blue-100
+        shadow-xl shadow-blue-500/10
         transition-transform duration-300
         ${sidebarOpen ? "translate-x-0" : `${isRTL ? "translate-x-full" : "-translate-x-full"} lg:translate-x-0`}
       `}
     >
-      <nav className="p-4 space-y-6 h-full pb-20 overflow-y-auto">
-        {/* MAIN SECTION */}
+      {/* Top accent line */}
+      <div className="h-0.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700" />
+
+      <nav className="p-4 space-y-6 h-full pb-24 overflow-y-auto">
+        {/* ── MAIN SECTION ── */}
         <div>
-          <p className="px-4 mb-2 text-xs font-semibold text-gray-400 uppercase">
+          <p className="px-4 mb-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
             {t("sections.main")}
           </p>
-
-          <div className="space-y-2">
-            {/* Dashboard - Always visible */}
+          <div className="space-y-1">
+            {/* Dashboard */}
             <Link
               href="/"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isLinkActive("/")
                   ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                  : "text-gray-700 hover:bg-blue-50"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
               }`}
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-5 h-5 flex-shrink-0" />
               <span className="font-medium">{t("dashboard")}</span>
             </Link>
 
-            {/* Enrollments */}
-            {hasPermission("ENROLLMENTS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("enrollments")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/enrollments", "/enrollments/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <UserCheck className="w-5 h-5" />
-                    <span className="font-medium">{t("enrollments")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["enrollments"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["enrollments"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("ENROLLMENTS_VIEW") && (
-                      <Link
-                        href="/enrollments"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/enrollments")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allEnrollments")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("ENROLLMENTS_CREATE") && (
-                      <Link
-                        href="/enrollments/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/enrollments/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addEnrollment")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Leads */}
-            {hasPermission("LEADS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("leads")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/leads/board", "/leads", "/leads/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <UserPlus className="w-5 h-5" />
-                    <span className="font-medium">{t("leads")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["leads"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["leads"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    <Link
-                      href="/leads/board"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/leads/board")
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <KanbanSquare className="w-4 h-4" />
-                      <span>{t("board")}</span>
-                    </Link>
-
-                    {hasPermission("LEADS_VIEW") && (
-                      <Link
-                        href="/leads"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/leads")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allLeads")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("LEADS_CREATE") && (
-                      <Link
-                        href="/leads/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/leads/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addLead")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {hasPermission("CUSTOMERS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("students")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/students", "/students/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <UserSquare className="w-5 h-5" />
-                    <span className="font-medium">{t("customers")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["customers"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["students"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("CUSTOMERS_VIEW") && (
-                      <Link
-                        href="/customers"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/customers")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allCustomers")}</span>
-                      </Link>
-                    )}
-
-                    {/* {hasPermission("CUSTOMERS_CREATE") && (
-                      <Link
-                        href="/customers/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/customers/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addCustomer")}</span>
-                      </Link>
-                    )} */}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Follow-up */}
-            {hasPermission("LEADS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("followups")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/follow-up", "/follow-up/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5" />
-                    <span className="font-medium">{t("followUp")}</span>
-                    {todayCount > 0 && (
-                      <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                        {todayCount}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["followups"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["followups"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("LEADS_VIEW") && (
-                      <Link
-                        href="/follow-up"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/follow-up")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allFollowUps")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("LEADS_EDIT") && (
-                      <Link
-                        href="/follow-up/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/follow-up/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addFollowUp")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            {mainNavItems.map(renderNavItem)}
           </div>
         </div>
 
-        {/* SYSTEM SECTION */}
+        {/* Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-blue-100 to-transparent" />
+
+        {/* ── SYSTEM SECTION ── */}
         <div>
-          <p className="px-4 mb-2 text-xs font-semibold text-gray-400 uppercase">
+          <p className="px-4 mb-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
             {t("sections.system")}
           </p>
-
-          <div className="space-y-2">
-            {/* Users */}
-            {hasPermission("USERS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("users")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/users", "/users/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <UserCircle className="w-5 h-5" />
-                    <span className="font-medium">{t("users")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["users"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["users"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("USERS_VIEW") && (
-                      <Link
-                        href="/users"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/users")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allUsers")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("USERS_CREATE") && (
-                      <Link
-                        href="/users/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/users/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addUser")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Roles */}
-            {hasPermission("ROLES_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("roles")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive(["/roles", "/roles/add"])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5" />
-                    <span className="font-medium">{t("roles")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["roles"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["roles"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("ROLES_VIEW") && (
-                      <Link
-                        href="/roles"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/roles")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <List className="w-4 h-4" />
-                        <span>{t("allRoles")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("ROLES_CREATE") && (
-                      <Link
-                        href="/roles/add"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/roles/add")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span>{t("addRole")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Settings */}
-            {hasPermission("SETTINGS_VIEW") && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("settings")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive([
-                      "/dashboard/settings",
-                      "/dashboard/settings/config",
-                      "/dashboard/settings/edit",
-                    ])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Settings className="w-5 h-5" />
-                    <span className="font-medium">{t("settings")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["settings"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["settings"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    {hasPermission("SETTINGS_GENERAL") && (
-                      <Link
-                        href="/dashboard/settings"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/dashboard/settings")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Edit className="w-4 h-4" />
-                        <span>{t("generalSettings")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("SETTINGS_CONFIG") && (
-                      <Link
-                        href="/dashboard/settings/config"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/dashboard/settings/config")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <Edit className="w-4 h-4" />
-                        <span>{t("systemConfig")}</span>
-                      </Link>
-                    )}
-
-                    {hasPermission("SETTINGS_EDIT") && (
-                      <Link
-                        href="/dashboard/settings/edit"
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                          isLinkActive("/dashboard/settings/edit")
-                            ? "bg-blue-50 text-blue-600 font-medium"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
-                      >
-                        <EditIcon className="w-4 h-4" />
-                        <span>{t("editSettings")}</span>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Profile - Always visible for logged-in users */}
-            {isLogin && (
-              <div>
-                <button
-                  onClick={() => toggleDropdown("profile")}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isDropdownActive([
-                      "/profile",
-                      "/profile/reset-password",
-                      "/profile/edit",
-                    ])
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-gray-700 hover:bg-blue-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <UserCircle2 className="w-5 h-5" />
-                    <span className="font-medium">{t("profile")}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      openDropdowns["profile"] ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openDropdowns["profile"]
-                      ? "max-h-96 opacity-100 mt-2"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div
-                    className={`${isRTL ? "mr-4 pr-4 border-r-2" : "ml-4 pl-4 border-l-2"} border-blue-200 space-y-1`}
-                  >
-                    <Link
-                      href="/profile"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/profile")
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <User className="w-4 h-4" />
-                      <span>{t("profile")}</span>
-                    </Link>
-                    <Link
-                      href="/profile/edit"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/profile/edit")
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <Edit className="w-4 h-4" />
-                      <span>{t("editProfile")}</span>
-                    </Link>
-
-                    <Link
-                      href="/profile/reset-password"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                        isLinkActive("/profile/reset-password")
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                    >
-                      <Edit className="w-4 h-4" />
-                      <span>{t("changePassword")}</span>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <div className="space-y-1">{systemNavItems.map(renderNavItem)}</div>
         </div>
 
-        {/* Logout Button */}
+        {/* Logout */}
         <button
           onClick={handleLogout}
-          className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-lg
-          text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all mt-8"
+          className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl
+            text-gray-600 hover:bg-red-50 hover:text-red-600 border border-transparent
+            hover:border-red-100 transition-all duration-200 mt-2 group"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-5 h-5 flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
           <span className="font-medium">{t("signOut")}</span>
         </button>
       </nav>

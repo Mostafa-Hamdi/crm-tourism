@@ -639,6 +639,12 @@
     "import": "استيراد"
   },
   "sidebar": {
+    "bookings": "الحجوزات",
+    "allBookings": "جميع الحجوزات",
+    "addBooking": "إضافة حجز",
+    "payments": "المدفوعات",
+    "allPayments": "جميع المدفوعات",
+    "addPayment": "إضافة مدفوعات",
     "customers": "العملاء",
     "allCustomers": "جميع العملاء",
     "sections": { "main": "الرئيسية", "system": "النظام" },

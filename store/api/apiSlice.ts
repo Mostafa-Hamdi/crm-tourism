@@ -103,6 +103,8 @@ export const api = createApi({
     "RolePermissions",
     "FollowUps",
     "Customers",
+    "Payments",
+    "Dashboard",
   ],
   endpoints: (builder) => ({
     /* =========================
@@ -149,7 +151,13 @@ export const api = createApi({
     /* =========================
        USER ENDPOINTS
        ========================= */
+    // dashboard
+    getDashboard: builder.query<any[], void>({
+      query: () => "/Dashboard/overview",
+      providesTags: ["Dashboard"],
+    }),
 
+    // users
     getUsers: builder.query<any[], void>({
       query: () => "/users",
       providesTags: ["Users"],
@@ -956,6 +964,27 @@ export const api = createApi({
       }),
       invalidatesTags: ["Customers"],
     }),
+
+    getPayments: builder.query<any, void>({
+      query: () => `/payments`,
+      providesTags: ["Payments"],
+    }),
+    addPayment: builder.mutation<
+      void,
+      {
+        enrollmentId: number;
+        amount: number;
+        method: number;
+        referenceNumber: string;
+      }
+    >({
+      query: ({ enrollmentId, amount, method, referenceNumber }) => ({
+        url: `/payments`,
+        method: "POST",
+        body: { enrollmentId, amount, method, referenceNumber },
+      }),
+      invalidatesTags: ["Payments"],
+    }),
   }),
 });
 
@@ -964,6 +993,8 @@ export const api = createApi({
 ====================== */
 
 export const {
+  useGetDashboardQuery,
+
   // Auth
   useLoginMutation,
   useLogoutMutation,
@@ -1058,4 +1089,6 @@ export const {
   useGetSpecificCustomersMutation,
   useDeleteCustomersMutation,
   useGetCustomerQuery,
+  useAddPaymentMutation,
+  useGetPaymentsQuery,
 } = api;

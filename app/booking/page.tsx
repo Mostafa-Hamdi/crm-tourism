@@ -84,7 +84,7 @@ const Page = () => {
         setEnrollmentsResponse(result);
         setDisplayedEnrollments(result.data);
       } catch (err) {
-        console.error("Failed to fetch enrollments:", err);
+        console.error("Failed to fetch Booking:", err);
       }
     };
 
@@ -103,18 +103,18 @@ const Page = () => {
         }).unwrap();
         setDisplayedEnrollments(result.data);
       } catch (err) {
-        console.error("Failed to fetch enrollments:", err);
+        console.error("Failed to fetch Booking:", err);
       }
     } else {
       try {
         const filtered = await getFilteredEnrollments({ statusId }).unwrap();
         setDisplayedEnrollments(filtered);
       } catch (err) {
-        console.error("Failed to filter enrollments:", err);
+        console.error("Failed to filter Booking:", err);
         Swal.fire({
           icon: "error",
           title: "Oops!",
-          text: "Failed to filter enrollments.",
+          text: "Failed to filter Booking.",
         });
       }
     }
@@ -136,7 +136,7 @@ const Page = () => {
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
-      title: "😢 Are you sure you want to delete this enrollment?",
+      title: "😢 Are you sure you want to delete this booking?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -151,7 +151,7 @@ const Page = () => {
       await Swal.fire({
         icon: "success",
         title: "Deleted!",
-        text: "Enrollment has been deleted successfully.",
+        text: "Booking has been deleted successfully.",
         timer: 2000,
       });
 
@@ -166,7 +166,7 @@ const Page = () => {
       Swal.fire({
         icon: "error",
         title: "Oops!",
-        text: "Failed to delete enrollment.",
+        text: "Failed to delete booking.",
       });
     }
   };
@@ -207,7 +207,7 @@ const Page = () => {
       await Swal.fire({
         icon: "success",
         title: "Status Updated!",
-        text: "Enrollment status has been updated successfully.",
+        text: "Booking status has been updated successfully.",
         timer: 2000,
       });
 
@@ -221,7 +221,7 @@ const Page = () => {
       setEnrollmentsResponse(result);
       setDisplayedEnrollments(result.data);
     } catch (err) {
-      let message = "Failed to update enrollment status.";
+      let message = "Failed to update booking status.";
 
       if (typeof err === "object" && err !== null) {
         const maybeData = (err as any).data;
@@ -401,21 +401,21 @@ const Page = () => {
               </div>
               <div>
                 <h1 className="text-3xl sm:text-4xl leading-[50px]  font-bold bg-gradient-to-r from-blue-700 via-cyan-600 to-blue-800 bg-clip-text text-transparent">
-                  Deals
+                  Bookings
                 </h1>
                 <p className="text-gray-600 mt-2 text-sm sm:text-base">
-                  Manage Deals and track progress
+                  Manage Bookings and track progress
                 </p>
               </div>
             </div>
 
             <Link
-              href={"/enrollments/add"}
+              href={"/booking/add"}
               className="group relative cursor-pointer flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-700 text-white font-semibold rounded-2xl hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <Plus className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">Add Deal</span>
+              <span className="relative z-10">Add Booking</span>
             </Link>
           </div>
         </div>
@@ -589,7 +589,7 @@ const Page = () => {
           {isLoading || isFilterLoading ? (
             <div className="p-20 flex flex-col items-center justify-center">
               <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4" />
-              <p className="text-gray-600 font-medium">Loading Deals...</p>
+              <p className="text-gray-600 font-medium">Loading Bookings...</p>
             </div>
           ) : filteredEnrollments.length === 0 ? (
             <div className="p-20 text-center">
@@ -598,8 +598,8 @@ const Page = () => {
               </div>
               <p className="text-gray-600 font-medium text-lg">
                 {searchQuery
-                  ? "No enrollments found matching your search"
-                  : "No enrollments yet"}
+                  ? "No bookings found matching your search"
+                  : "No bookings yet"}
               </p>
             </div>
           ) : (
@@ -609,12 +609,12 @@ const Page = () => {
                   <tr>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Student
+                        Traveler
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Course
+                        Trip
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
@@ -629,7 +629,7 @@ const Page = () => {
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Enrollment Date
+                        Booking Date
                       </span>
                     </th>
                     <th className="px-6 py-5 text-center">

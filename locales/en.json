@@ -659,6 +659,12 @@
   },
 
   "sidebar": {
+    "bookings": "Bookings",
+    "allBookings": "All Bookings",
+    "addBooking": "Add Booking",
+    "payments": "Payments",
+    "allPayments": "All Payments",
+    "addPayment": "Add Payment",
     "customers": "Customers",
     "allCustomers": "All Customers",
     "sections": {

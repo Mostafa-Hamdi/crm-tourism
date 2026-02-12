@@ -1,26 +1,25 @@
 "use client";
 
 import {
-  useDeleteStudentMutation,
-  useGetSpecificStudentsMutation,
-  useSearchStudentsMutation,
+  useDeleteCourseMutation,
+  useGetCoursesQuery,
 } from "@/store/api/apiSlice";
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Plus,
-  GraduationCap,
+  BookOpen,
   Edit2,
   Trash2,
   Sparkles,
-  Phone,
-  Mail,
-  Calendar,
-  CreditCard,
+  GraduationCap,
+  Clock,
+  Tag,
   CheckCircle,
   XCircle,
-  UserCircle,
-  Users,
+  Globe,
+  Hash,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -29,204 +28,95 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import { useTranslations } from "next-intl";
 
-interface Student {
+interface Course {
   id: number;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  nationalId: string | null;
-  gender: string | null;
-  dateOfBirth: string;
-  relativeName: string | null;
-  parentPhoneNumber: string | null;
-  level: string | null;
+  name: string;
+  code: string;
+  description: string;
+  estimatedDurationHours: number;
+  level: number;
+  language: string | null;
+  tags: string | null;
+  category: string;
+  classesCount: number;
   isActive: boolean;
   createdAt: string;
 }
 
-interface PaginatedResponse {
-  data: Student[];
-  totalCount: number;
-  pageNumber: number;
-  pageSize: number;
-  totalPages: number;
-}
-
 const Page = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isSearchMode, setIsSearchMode] = useState(false);
 
-  const [getSpecificStudents, { isLoading }] = useGetSpecificStudentsMutation();
-  const [deleteStudent] = useDeleteStudentMutation();
-  const [searchStudents, { isLoading: isSearchLoading }] =
-    useSearchStudentsMutation();
+  const { data: courses, isLoading } = useGetCoursesQuery();
+  const [deleteCourse] = useDeleteCourseMutation();
 
-  // Fetch paginated students
+  const t = useTranslations("courses");
+
+  // Filter courses based on search query
+  const filteredCourses = useMemo(() => {
+    if (!courses) return [];
+
+    const query = searchQuery.toLowerCase();
+    return courses.data.filter(
+      (course: Course) =>
+        course.name.toLowerCase().includes(query) ||
+        course.code.toLowerCase().includes(query) ||
+        course.category.toLowerCase().includes(query) ||
+        (course.description &&
+          course.description.toLowerCase().includes(query)) ||
+        (course.tags && course.tags.toLowerCase().includes(query)),
+    );
+  }, [courses, searchQuery]);
+
+  // Paginate the filtered courses
+  const paginatedCourses = useMemo(() => {
+    const startIndex = (pageNumber - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return filteredCourses.slice(startIndex, endIndex);
+  }, [filteredCourses, pageNumber, pageSize]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredCourses.length / pageSize);
+
+  // Reset to first page when search query or page size changes
   useEffect(() => {
-    const fetchStudents = async () => {
-      if (isSearchMode) return; // Don't fetch if in search mode
-
-      try {
-        const result = await getSpecificStudents({
-          pageNumber: currentPage,
-          pageSize: pageSize,
-        }).unwrap();
-
-        setStudents(result?.data || []);
-        setTotalCount(result.totalCount || 0);
-        setTotalPages(result.totalPages || 0);
-      } catch (error) {
-        console.error("Failed to fetch students:", error);
-        setStudents([]);
-      }
-    };
-
-    fetchStudents();
-  }, [currentPage, pageSize, getSpecificStudents, isSearchMode]);
-
-  // Handle search with debounce
-  useEffect(() => {
-    const handleSearch = async () => {
-      if (!searchQuery.trim()) {
-        // Exit search mode and go back to pagination
-        setIsSearchMode(false);
-        setCurrentPage(1);
-        return;
-      }
-
-      setIsSearchMode(true);
-
-      try {
-        const result = await searchStudents({ name: searchQuery }).unwrap();
-        console.log("Search result:", result);
-        setStudents(result);
-        setTotalCount(result.length);
-        setTotalPages(1);
-      } catch (error) {
-        console.error("Search failed:", error);
-        setStudents([]);
-        setTotalCount(0);
-      }
-    };
-
-    // Debounce search by 500ms
-    const timeoutId = setTimeout(() => {
-      handleSearch();
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, searchStudents]);
+    setPageNumber(1);
+  }, [searchQuery, pageSize]);
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
-      title: "😢 Are you sure you want to delete this student?",
+      title: t("deleteConfirm"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
+      confirmButtonText: t("confirmYes"),
+      cancelButtonText: t("confirmNo"),
       confirmButtonColor: "#2563eb",
       cancelButtonColor: "#e5e7eb",
     });
 
     if (!result.isConfirmed) return;
-
     try {
-      await deleteStudent({ id }).unwrap();
+      await deleteCourse({ id }).unwrap();
       await Swal.fire({
         icon: "success",
-        title: "Deleted!",
-        text: "Student has been deleted successfully.",
+        title: t("deleteSuccess"),
+        text: "",
         timer: 2000,
       });
-
-      // Refresh current page
-      if (isSearchMode && searchQuery) {
-        // Re-trigger search
-        const result = await searchStudents({ name: searchQuery }).unwrap();
-        setStudents(result);
-        setTotalCount(result.length);
-      } else {
-        // Re-fetch current page
-        const result = await getSpecificStudents({
-          pageNumber: currentPage,
-          pageSize: pageSize,
-        }).unwrap();
-        setStudents(result.data || []);
-        setTotalCount(result.totalCount || 0);
-        setTotalPages(result.totalPages || 0);
-      }
     } catch (err) {
       Swal.fire({
         icon: "error",
-        title: "Oops!",
-        text: "Failed to delete student.",
+        title: t("oops"),
+        text: t("deleteFail"),
       });
     }
   };
 
-  // Handle page size change
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    setCurrentPage(1); // Reset to first page when changing page size
-  };
-
-  // Pagination handlers
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages && !isSearchMode) {
-      setCurrentPage(page);
-    }
-  };
-
-  const goToFirstPage = () => goToPage(1);
-  const goToLastPage = () => goToPage(totalPages);
-  const goToPreviousPage = () => goToPage(currentPage - 1);
-  const goToNextPage = () => goToPage(currentPage + 1);
-
-  // Generate page numbers to display
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const maxVisible = 5;
-
-    if (totalPages <= maxVisible) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push("...");
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push("...");
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push("...");
-        pages.push(currentPage - 1);
-        pages.push(currentPage);
-        pages.push(currentPage + 1);
-        pages.push("...");
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
-  };
-
-  // Format date (without time)
+  // Format date
   const formatDate = (dateString: string) => {
-    if (!dateString || dateString === "0001-01-01T00:00:00") return "N/A";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -235,8 +125,29 @@ const Page = () => {
     });
   };
 
-  // Generate random colors for student icons
-  const getColorForStudent = (index: number) => {
+  // Get level name (from translations)
+  const getLevelName = (level: number) => {
+    try {
+      return t(`level.${level}`);
+    } catch (e) {
+      return "Unknown";
+    }
+  };
+
+  // Get level color
+  const getLevelColor = (level: number) => {
+    const colors: { [key: number]: string } = {
+      1: "from-green-100 to-emerald-100 border-green-200 text-green-700",
+      2: "from-yellow-100 to-orange-100 border-yellow-200 text-yellow-700",
+      3: "from-red-100 to-rose-100 border-red-200 text-red-700",
+    };
+    return (
+      colors[level] || "from-gray-100 to-gray-100 border-gray-200 text-gray-700"
+    );
+  };
+
+  // Generate random colors for course icons
+  const getColorForCourse = (index: number) => {
     const colors = [
       "from-blue-600 to-cyan-600",
       "from-purple-600 to-pink-600",
@@ -250,17 +161,73 @@ const Page = () => {
     return colors[index % colors.length];
   };
 
-  // Calculate stats
-  const activeStudents = students?.filter((s) => s.isActive).length;
-  const inactiveStudents = students?.filter((s) => !s.isActive).length;
-  console.log("Students:", students);
+  // Count active and inactive courses
+  const activeCourses =
+    courses?.data?.filter((c: Course) => c.isActive).length || 0;
+  const inactiveCourses =
+    courses?.data?.filter((c: Course) => !c.isActive).length || 0;
+
+  // Handle page size change
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setPageNumber(1); // Reset to first page when changing page size
+  };
+
+  // Pagination handlers
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setPageNumber(page);
+    }
+  };
+
+  const goToFirstPage = () => goToPage(1);
+  const goToLastPage = () => goToPage(totalPages);
+  const goToPreviousPage = () => goToPage(pageNumber - 1);
+  const goToNextPage = () => goToPage(pageNumber + 1);
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (pageNumber <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push("...");
+        pages.push(totalPages);
+      } else if (pageNumber >= totalPages - 2) {
+        pages.push(1);
+        pages.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push("...");
+        pages.push(pageNumber - 1);
+        pages.push(pageNumber);
+        pages.push(pageNumber + 1);
+        pages.push("...");
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
       {/* Decorative Elements */}
       <div className="fixed top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl -z-10" />
       <div className="fixed bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-indigo-400/20 to-blue-400/20 rounded-full blur-3xl -z-10" />
 
-      <div className="max-w-[1800px] mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-blue-500/10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -275,21 +242,21 @@ const Page = () => {
               </div>
               <div>
                 <h1 className="text-3xl sm:text-4xl leading-[50px]  font-bold bg-gradient-to-r from-blue-700 via-cyan-600 to-blue-800 bg-clip-text text-transparent">
-                  Students
+                  {t("title")}
                 </h1>
                 <p className="text-gray-600 mt-2 text-sm sm:text-base">
-                  Manage and track all enrolled students
+                  {t("subtitle")}
                 </p>
               </div>
             </div>
 
             <Link
-              href={"/students/add"}
+              href={"/courses/add"}
               className="group relative cursor-pointer flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-700 text-white font-semibold rounded-2xl hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <Plus className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">Add Student</span>
+              <span className="relative z-10">{t("addButton")}</span>
             </Link>
           </div>
         </div>
@@ -300,14 +267,14 @@ const Page = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm font-medium">
-                  Total Students
+                  {t("totalCourses")}
                 </p>
                 <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mt-1">
-                  {totalCount}
+                  {courses?.data?.length || 0}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-blue-600" />
+                <BookOpen className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </div>
@@ -315,9 +282,11 @@ const Page = () => {
           <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-2xl p-6 shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Active</p>
+                <p className="text-gray-600 text-sm font-medium">
+                  {t("active")}
+                </p>
                 <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mt-1">
-                  {activeStudents}
+                  {activeCourses}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center">
@@ -329,9 +298,11 @@ const Page = () => {
           <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-2xl p-6 shadow-lg shadow-red-500/10 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Inactive</p>
+                <p className="text-gray-600 text-sm font-medium">
+                  {t("inactive")}
+                </p>
                 <p className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent mt-1">
-                  {inactiveStudents}
+                  {inactiveCourses}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-rose-100 rounded-xl flex items-center justify-center">
@@ -344,10 +315,10 @@ const Page = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm font-medium">
-                  {isSearchMode ? "Found" : "On Page"}
+                  {t("found")}
                 </p>
                 <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mt-1">
-                  {students?.length}
+                  {filteredCourses.length}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
@@ -364,59 +335,54 @@ const Page = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
               <input
                 type="text"
-                placeholder="Search students by name..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-gradient-to-r from-gray-50 to-blue-50/50 border-2 border-gray-200 rounded-xl pl-12 pr-4 py-3.5 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:bg-white transition-all"
               />
-              {isSearchLoading && (
-                <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                  <div className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-                </div>
-              )}
             </div>
 
             {/* Page Size Selector */}
-            {!isSearchMode && (
-              <div className="flex items-center gap-3 px-4 py-3.5 bg-gradient-to-r from-gray-50 to-blue-50/50 border-2 border-gray-200 rounded-xl">
-                <List className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
-                  Show:
-                </span>
-                <div className="flex items-center gap-2">
-                  {[5, 10, 20, 50].map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => handlePageSizeChange(size)}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all cursor-pointer ${
-                        pageSize === size
-                          ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                          : "bg-white text-gray-700 hover:bg-blue-50 border border-gray-200"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+            <div className="flex items-center gap-3 px-4 py-3.5 bg-gradient-to-r from-gray-50 to-blue-50/50 border-2 border-gray-200 rounded-xl">
+              <List className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                {t("show")}
+              </span>
+              <div className="flex items-center gap-2">
+                {[5, 10, 20, 50].map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handlePageSizeChange(size)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all cursor-pointer ${
+                      pageSize === size
+                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
+                        : "bg-white text-gray-700 hover:bg-blue-50 border border-gray-200"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             <div className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 border border-blue-400 rounded-xl shadow-lg shadow-blue-500/30">
-              <GraduationCap className="w-5 h-5 text-white" />
+              <BookOpen className="w-5 h-5 text-white" />
               <span className="text-sm font-bold text-white">
-                {students?.length} Students
+                {filteredCourses.length} {t("title")}
               </span>
             </div>
           </div>
 
-          {/* Pagination Info - Only show when not searching */}
-          {!isSearchMode && totalPages > 0 && (
+          {/* Pagination Info */}
+          {totalPages > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-200">
               <p className="text-sm text-gray-600 text-center">
-                Showing page{" "}
-                <span className="font-bold text-blue-600">{currentPage}</span>{" "}
-                of <span className="font-bold text-blue-600">{totalPages}</span>{" "}
-                ({totalCount} total students, {pageSize} per page)
+                {t("pagination", {
+                  page: pageNumber,
+                  total: totalPages,
+                  count: filteredCourses.length,
+                  per: pageSize,
+                })}
               </p>
             </div>
           )}
@@ -424,20 +390,18 @@ const Page = () => {
 
         {/* Table Card */}
         <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-3xl overflow-hidden shadow-xl shadow-blue-500/10">
-          {isLoading || isSearchLoading ? (
+          {isLoading ? (
             <div className="p-20 flex flex-col items-center justify-center">
               <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4" />
-              <p className="text-gray-600 font-medium">Loading students...</p>
+              <p className="text-gray-600 font-medium">{t("loading")}</p>
             </div>
-          ) : students?.length === 0 ? (
+          ) : paginatedCourses.length === 0 ? (
             <div className="p-20 text-center">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-gray-100 to-blue-100 rounded-full mb-4">
-                <GraduationCap className="w-10 h-10 text-gray-400" />
+                <BookOpen className="w-10 h-10 text-gray-400" />
               </div>
               <p className="text-gray-600 font-medium text-lg">
-                {searchQuery
-                  ? "No students found matching your search"
-                  : "No students yet"}
+                {searchQuery ? t("noCoursesFound") : t("noCoursesYet")}
               </p>
             </div>
           ) : (
@@ -447,216 +411,184 @@ const Page = () => {
                   <tr>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Student Info
+                        {t("table.courseInfo")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Contact
+                        {t("table.category")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        National ID
+                        {t("table.level")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Gender
+                        {t("table.duration")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Date of Birth
+                        {t("table.language")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Parent Info
+                        {t("table.classes")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Level
+                        {t("table.status")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-left">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Status
+                        {t("table.created")}
                       </span>
                     </th>
                     <th className="px-6 py-5 text-center">
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Operations
+                        {t("table.operations")}
                       </span>
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {students?.map((student: Student, index: number) => (
+                  {paginatedCourses.map((course: Course, index: number) => (
                     <tr
-                      key={student.id}
+                      key={course.id}
                       className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-cyan-50/30 transition-all duration-200"
                     >
-                      {/* Student Info */}
+                      {/* Course Info */}
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-12 h-12 bg-gradient-to-br ${getColorForStudent(
+                            className={`w-12 min-w-12 h-12 bg-gradient-to-br ${getColorForCourse(
                               index,
                             )} rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30`}
                           >
-                            <GraduationCap className="w-6 h-6 text-white" />
+                            <BookOpen className="w-6 h-6 text-white" />
                           </div>
-                          <div>
+                          <div className="max-w-xs">
                             <div className="font-semibold text-gray-900 text-base">
-                              {student.fullName}
+                              {course.name}
                             </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Contact */}
-                      <td className="px-6 py-5">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Mail className="w-3.5 h-3.5 text-gray-400" />
-                            <span className="text-gray-700 text-sm font-medium">
-                              {student.email}
-                            </span>
-                          </div>
-                          {student.phoneNumber && (
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-gray-400" />
-                              <span className="text-gray-600 text-xs">
-                                {student.phoneNumber}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* National ID */}
-                      <td className="px-6 py-5">
-                        {student.nationalId ? (
-                          <div className="flex items-center gap-2">
-                            <CreditCard className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-700 text-sm font-mono font-medium">
-                              {student.nationalId}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-sm italic">
-                            Not provided
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Gender */}
-                      <td className="px-6 py-5">
-                        {student.gender ? (
-                          <div className="flex items-center gap-2">
-                            <UserCircle className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-700 text-sm font-medium capitalize">
-                              {student.gender}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-sm italic">
-                            Not specified
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Date of Birth */}
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-700 text-sm font-medium">
-                            {formatDate(student.dateOfBirth)}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Parent Info */}
-                      <td className="px-6 py-5">
-                        {student.relativeName || student.parentPhoneNumber ? (
-                          <div className="space-y-1">
-                            {student.relativeName && (
-                              <div className="flex items-center gap-2">
-                                <Users className="w-3.5 h-3.5 text-gray-400" />
-                                <span className="text-gray-700 text-sm font-medium">
-                                  {student.relativeName}
-                                </span>
-                              </div>
-                            )}
-                            {student.parentPhoneNumber && (
-                              <div className="flex items-center gap-2">
-                                <Phone className="w-3.5 h-3.5 text-gray-400" />
-                                <span className="text-gray-600 text-xs">
-                                  {student.parentPhoneNumber}
-                                </span>
+                            {course.description && (
+                              <div className="text-xs text-gray-600 mt-1 line-clamp-2">
+                                {course.description}
                               </div>
                             )}
                           </div>
-                        ) : (
-                          <span className="text-gray-400 text-sm italic">
-                            Not provided
-                          </span>
-                        )}
+                        </div>
+                      </td>
+
+                      {/* Category */}
+                      <td className="px-6 py-5">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-bold shadow-sm">
+                          <Tag className="w-3 h-3" />
+                          {course.category}
+                        </span>
                       </td>
 
                       {/* Level */}
                       <td className="px-6 py-5">
-                        {student.level ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-100 to-blue-100 border border-indigo-200 text-indigo-700 rounded-lg text-xs font-bold shadow-sm">
-                            <GraduationCap className="w-3 h-3" />
-                            {student.level}
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r border rounded-lg text-xs font-bold shadow-sm ${getLevelColor(
+                            course.level,
+                          )}`}
+                        >
+                          {getLevelName(course.level)}
+                        </span>
+                      </td>
+
+                      {/* Duration */}
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <Clock className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <span className="text-gray-700 text-sm font-medium">
+                            {t("durationHours", {
+                              hours: course.estimatedDurationHours,
+                            })}
                           </span>
-                        ) : (
-                          <span className="text-gray-400 text-sm italic">
-                            Not assigned
-                          </span>
-                        )}
+                        </div>
+                      </td>
+
+                      {/* Language */}
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2">
+                          {course.language ? (
+                            <>
+                              <Globe className="w-4 h-4 text-gray-400" />
+                              <span className="text-gray-700 text-sm">
+                                {course.language}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-gray-400 text-sm italic">
+                              {t("notSet")}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Classes Count */}
+                      <td className="px-6 py-5">
+                        <Link
+                          href={`/courses/${course.id}/classes`}
+                          className="cursor-pointer hover:underline"
+                        >
+                          <div className="cursor-pointer flex items-center gap-2">
+                            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                              <Hash className="w-4 h-4 text-indigo-600" />
+                            </div>
+                            <span className="text-gray-700 text-sm font-medium">
+                              {course.classesCount}
+                            </span>
+                          </div>
+                        </Link>
                       </td>
 
                       {/* Status */}
                       <td className="px-6 py-5">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r border rounded-lg text-xs font-bold shadow-sm ${
-                            student.isActive
-                              ? "from-green-100 to-emerald-100 border-green-200 text-green-700"
-                              : "from-red-100 to-rose-100 border-red-200 text-red-700"
-                          }`}
-                        >
-                          {student.isActive ? (
-                            <>
-                              <CheckCircle className="w-3.5 h-3.5" />
-                              Active
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="w-3.5 h-3.5" />
-                              Inactive
-                            </>
-                          )}
-                        </span>
+                        {course.isActive ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-200 text-green-700 rounded-lg text-xs font-bold shadow-sm">
+                            <CheckCircle className="w-3 h-3" />
+                            {t("active")}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-gray-100 to-slate-100 border border-gray-200 text-gray-700 rounded-lg text-xs font-bold shadow-sm">
+                            <XCircle className="w-3 h-3" />
+                            {t("inactive")}
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Created Date */}
+                      <td className="px-6 py-5">
+                        <div className="text-sm text-gray-700 font-medium">
+                          {formatDate(course.createdAt)}
+                        </div>
                       </td>
 
                       {/* Actions */}
                       <td className="px-6 py-5">
                         <div className="flex items-center justify-center gap-2">
                           <Link
-                            href={`/students/${student.id}/edit`}
+                            href={`/courses/${course.id}/edit`}
                             className="cursor-pointer p-2.5 text-blue-600 hover:text-white bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 group"
-                            title="Edit student"
+                            title={t("editCourse")}
                           >
                             <Edit2 className="w-5 h-5" />
                           </Link>
                           <button
-                            onClick={() => handleDelete(student.id)}
+                            onClick={() => handleDelete(course.id)}
                             className="cursor-pointer p-2.5 text-red-600 hover:text-white bg-red-50 hover:bg-gradient-to-r hover:from-red-600 hover:to-rose-600 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-red-500/30 group"
-                            title="Delete student"
+                            title={t("deleteCourse")}
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -670,25 +602,25 @@ const Page = () => {
           )}
         </div>
 
-        {/* Pagination Controls - Only show when not searching */}
-        {!isSearchMode && totalPages > 1 && (
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
           <div className="bg-white/70 backdrop-blur-2xl border border-white/60 rounded-2xl p-6 shadow-lg shadow-blue-500/10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* Previous buttons */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={goToFirstPage}
-                  disabled={currentPage === 1}
+                  disabled={pageNumber === 1}
                   className="p-2 rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:bg-transparent transition-all cursor-pointer"
-                  title="First page"
+                  title={t("firstPage")}
                 >
                   <ChevronsLeft className="w-5 h-5 text-gray-600" />
                 </button>
                 <button
                   onClick={goToPreviousPage}
-                  disabled={currentPage === 1}
+                  disabled={pageNumber === 1}
                   className="p-2 rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:bg-transparent transition-all cursor-pointer"
-                  title="Previous page"
+                  title={t("previousPage")}
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-600" />
                 </button>
@@ -700,9 +632,9 @@ const Page = () => {
                   <button
                     key={index}
                     onClick={() => typeof page === "number" && goToPage(page)}
-                    disabled={page === "..." || page === currentPage}
+                    disabled={page === "..." || page === pageNumber}
                     className={`min-w-[40px] h-10 px-3 rounded-lg font-semibold transition-all cursor-pointer ${
-                      page === currentPage
+                      page === pageNumber
                         ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
                         : page === "..."
                           ? "cursor-default"
@@ -718,17 +650,17 @@ const Page = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={goToNextPage}
-                  disabled={currentPage === totalPages}
+                  disabled={pageNumber === totalPages}
                   className="p-2 rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:bg-transparent transition-all cursor-pointer"
-                  title="Next page"
+                  title={t("nextPage")}
                 >
                   <ChevronRight className="w-5 h-5 text-gray-600" />
                 </button>
                 <button
                   onClick={goToLastPage}
-                  disabled={currentPage === totalPages}
+                  disabled={pageNumber === totalPages}
                   className="p-2 rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:bg-transparent transition-all cursor-pointer"
-                  title="Last page"
+                  title={t("lastPage")}
                 >
                   <ChevronsRight className="w-5 h-5 text-gray-600" />
                 </button>
