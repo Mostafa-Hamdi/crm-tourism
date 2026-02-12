@@ -219,7 +219,7 @@ export default function LuxuryLogin() {
                   </div>
 
                   {/* Remember & Forgot */}
-                  <div className="flex items-center justify-between">
+                  {/* <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 cursor-pointer group/check">
                       <input
                         type="checkbox"
@@ -235,7 +235,7 @@ export default function LuxuryLogin() {
                     >
                       {t("forgotPassword")}
                     </a>
-                  </div>
+                  </div> */}
 
                   {/* Submit button */}
                   <button
@@ -258,13 +258,13 @@ export default function LuxuryLogin() {
                   </button>
 
                   {/* Create account */}
-                  <a
+                  {/* <a
                     href="#"
                     className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-bold transition-all group/link"
                   >
                     <span>{t("createAccount")}</span>
                     <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                  </a>
+                  </a> */}
                 </form>
               </div>
             </div>
